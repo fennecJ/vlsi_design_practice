@@ -25,6 +25,7 @@ FullAdder FullAdder2(.A(A[2]),.B(D[2]),.Cin(c[1]),.S(S[2]),.Cout(c[2]));
 FullAdder FullAdder3(.A(A[3]),.B(D[3]),.Cin(c[2]),.S(S[3]),.Cout(c[3]));
 FullAdder FullAdder4(.A(A[4]),.B(D[4]),.Cin(c[3]),.S(S[4]),.Cout(Cout));
 /************************************/
+assign ov_flag=(c[3]==Cout)?(0):(1);
 
 endmodule
 
