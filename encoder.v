@@ -13,11 +13,14 @@ module encoder(I3,I2,I1,I0,O1,O0);
 input I3,I2,I1,I0;
 output O1,O0;
  
-/********* your code ***********/
+/********* O0 ***********/
+wire i3, i2, o0;
+not(i3,I3);
+not(i2,I2);
+and(o0,i3,i2,I1);
+or(O0,I3,o0);
 
 
-
-
-/******************************/
+/********* O1 ***********/
 
 endmodule
