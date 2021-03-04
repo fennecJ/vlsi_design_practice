@@ -15,7 +15,9 @@ wire s1,c1,c2;
 /********* your code ***********/
 and(c1,A,B);
 xor(s1,A,B);
-
+and(c2,Cin,s1);
+xor(S,Cin,s1);
+or(Cout,c2,c1);
 
 /******************************/
 
