@@ -11,8 +11,10 @@ module FullAdder(A,B,Cin,S,Cout);
 // Input and output ports declaration
 input A,B,Cin;
 output S,Cout;
-
+wire s1,c1,c2;
 /********* your code ***********/
+and(c1,A,B);
+xor(s1,A,B);
 
 
 /******************************/
