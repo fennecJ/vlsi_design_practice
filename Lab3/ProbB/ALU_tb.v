@@ -51,7 +51,7 @@ ALU alu (.alu_enable(alu_enable), .alu_op(alu_op), .src1(src1), .src2(src2),
 
 //monitor
 initial begin
-  $monitor("alu_enable = %b, alu_op = %b,\nsrc1    = %b,\nsrc2    = %b,\nalu_out = %b,alu_overflow = %b\n", alu_enable, alu_op, src1, src2, alu_out, alu_overflow);
+  $monitor("alu_enable = %b, alu_op = %b,\nsrc1    = %b,  | %d\nsrc2    = %b,  | %d\nalu_out = %b,alu_overflow = %b\n", alu_enable, alu_op, src1, src1, src2, src2,alu_out, alu_overflow);
 end
 
 initial begin
@@ -63,6 +63,10 @@ initial begin
 #10               alu_op = `NORop;  src1 = 32'h0f0f_0f0f; src2 = 32'hf0f0_0f0f;
 #10               alu_op = `SRLop;  src1 = 32'hff0f_0f0f; src2 = 32'h0000_0002;
 #10               alu_op = `ROTRop; src1 = 32'h0f0f_0f0f; src2 = 32'h0000_0003;
+#10				  alu_op = `NOTop;  src1 = 32'h0f0f_0f0f; src2 = 32'h0000_0000;
+#10				  alu_op = `NANDop;  src1 = 32'haf3c_ff00; src2 = 32'h50c3_ff00;
+#10				  alu_op = `MAXop;  src1 = 32'h8000_1234; src2 = 32'h0fff_0111;
+#10				  alu_op = `NOTop;  src1 = 32'h0f0f_0f0f; src2 = 32'H0000_0000;
 //  Done by students
 
 #10  $finish;
