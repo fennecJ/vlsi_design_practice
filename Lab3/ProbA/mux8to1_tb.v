@@ -7,13 +7,12 @@ module mux8to1_tb;
   integer i;
 initial
 begin
-  for (i = 0; i <256; i = i + 13 )
+  for (i = 0; i <256; i = i + 23 )
      begin
         #10 {A,B,C,D,E,F,G,H} = i;
 			sel = i % 8;
-     $monitor ("%-d ns: \nA = %b , B = %b , C = %b , D = %b\nE = %b , F = %b , G = %b , H = %b , sel = %d[%c] , Q = %d\n",$time,A,B,C,D,E,F,G,H,sel,sel+65,Q);
+     $monitor ("%-d ns:\nA = %b , B = %b , C = %b , D = %b  |\nE = %b , F = %b , G = %b , H = %b  |  sel = %d[%c] , Q = %d",$time,A,B,C,D,E,F,G,H,sel,sel+65,Q);
        end
-
     #10 $finish;
    end
 endmodule
