@@ -20,7 +20,7 @@ initial
 begin
 `ifdef FSDB
   $fsdbDumpfile("mux8to1.fsdb");
-  $fsDumpvars;
+  $fsdbDumpvars;
 `endif
 end
 endmodule
