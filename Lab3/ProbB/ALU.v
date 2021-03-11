@@ -82,7 +82,9 @@ always@(*)begin
               end
 
 /************ your code **************/
-
+	  `NOTop  :  alu_out = ~src1;
+	  `NANDop :  alu_out = ~(src1 & src2);
+	  `MAXop  :  alu_out = src1 ^ ((src1 ^ src2) & ~(src1 < src2));
 
 /************************************/
 
