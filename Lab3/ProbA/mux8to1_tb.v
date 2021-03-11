@@ -15,4 +15,12 @@ begin
        end
     #10 $finish;
    end
+
+initial
+begin
+`ifdef FSDB
+  $fsdbDumpfile("mux8to1.fsdb");
+  $fsDumpvars;
+`endif
+end
 endmodule
