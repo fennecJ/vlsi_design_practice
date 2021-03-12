@@ -95,7 +95,7 @@ always@(*)begin
 	  `ROTLop :  begin
 				 temp = {src1,src1};
 				 temp = temp << (src2 % 32);
-				 alu_out = temp[31:0];
+				 alu_out = temp[63:32];
  				 end
 				 
 /************************************/
