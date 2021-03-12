@@ -91,8 +91,8 @@ always@(*)begin
 				 alu_overflow = (alu_out & 32'h8000_0000)? 1'b1 : 1'b0;
 				 end
 	  `SLTSop :  alu_out = ($signed(src1) < $signed(src2)) ? 1'b1 : 1'b0;
-	  `SLLop  :  alu_out = src1 << src2; 
-
+	  `SLLop  :  alu_out = src1 <<< src2; 
+	  //`ROTLop :
 /************************************/
 
       endcase
