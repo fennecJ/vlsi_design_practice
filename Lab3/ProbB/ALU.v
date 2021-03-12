@@ -90,6 +90,8 @@ always@(*)begin
 				 alu_out = (src1 & 32'h8000_0000) ? (~src1 + 1) : src1;
 				 alu_overflow = (alu_out & 32'h8000_0000)? 1'b1 : 1'b0;
 				 end
+	  `SLTSop :  alu_out = ($signed(src1) < $signed(src2)) ? 1'b1 : 1'b0;
+	  `SLLop  :  alu_out = src1 << src2; 
 
 /************************************/
 
