@@ -39,8 +39,8 @@ reg [8*6:1] ops;
 // ----------------------   reg   ---------------------- //
 reg                     alu_enable;
 reg   [`ALUopSize-1:0]  alu_op;
-reg signed  [`DataSize-1:0]   src1;
-reg signed  [`DataSize-1:0]   src2;
+reg   [`DataSize-1:0]   src1;
+reg   [`DataSize-1:0]   src2;
 
 // ----------------------   wire  ---------------------- //
 wire   [`DataSize-1:0]  alu_out;
@@ -51,7 +51,7 @@ ALU alu (.alu_enable(alu_enable), .alu_op(alu_op), .src1(src1), .src2(src2),
 
 //monitor
 initial begin
-  $monitor("alu_enable = %b, alu_op = %b,  | %s\nsrc1    = %b,  | %d\nsrc2    = %b,  | %d\nalu_out = %b,alu_overflow = %b\n", alu_enable, alu_op, ops, src1, src1, src2, src2,alu_out, alu_overflow);
+  $monitor("alu_enable = %b, alu_op = %b,  | %s\nsrc1    = %b,  | %d\nsrc2    = %b,  | %d\nalu_out = %b   | %d ,alu_overflow = %b\n", alu_enable, alu_op, ops, src1, $signed(src1), src2, $signed(src2),alu_out, $signed(alu_out), alu_overflow);
 end
 
 initial begin
