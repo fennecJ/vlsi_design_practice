@@ -64,11 +64,14 @@ initial begin
 #10               alu_op = `SRLop;  src1 = 32'hff0f_0f0f; src2 = 32'h0000_0002;  ops = "SRLop";
 #10               alu_op = `ROTRop; src1 = 32'h0f0f_0f0f; src2 = 32'h0000_0003;  ops = "ROTRop";
 #10				  alu_op = `NOTop;  src1 = 32'h0f0f_0f0f; src2 = 32'h0000_0000;  ops = "NOTop";
-#10				  alu_op = `NANDop;  src1 = 32'haf3c_ff00; src2 = 32'h50c3_ff00; ops = "NANDop";
+#10				  alu_op = `NANDop; src1 = 32'haf3c_ff00; src2 = 32'h50c3_ff00;  ops = "NANDop";
 #10				  alu_op = `MAXop;  src1 = 32'h8000_1234; src2 = 32'h0fff_0111;  ops = "MAXop";
-#10				  alu_op = `NOTop;  src1 = 32'h0f0f_0f0f; src2 = 32'H0000_0000;  ops = "NOTop";
+#10				  alu_op = `MINop;  src1 = 32'h0fff_0111; src2 = 32'h8000_1234;  ops = "MINop";
+#10				  alu_op = `ABSop;  src1 = 32'hffff_ffff; src2 = 32'h0000_0000;  ops = "ABSop";
 //  Done by students
-
+//Other test data
+#10				  alu_op = `ABSop;  src1 = 32'h8000_0000; src2 = 32'h0000_0000;  ops = "ABSop";
+//
 #10  $finish;
 end
 
