@@ -71,13 +71,16 @@ initial begin
 #10				  alu_op = `SLTSop; src1 = 32'h8000_1234; src2 = 32'h0fff_0111;  ops = "SLTSop";
 #10				  alu_op = `SLLop;  src1 = 32'hff00_00ff; src2 = 32'h0000_0002;  ops = "SLLop";
 #10				  alu_op = `ROTLop; src1 = 32'hff00_00ff; src2 = 32'h0000_0002;  ops = "ROTLop";
-
+#10				  alu_op = `ADDUop; src1 = 32'h4f00_00ff; src2 = 32'h0000_002f;  ops = "ADDUop";
 //  Done by students
 
 //  Other test data
 //#10				  alu_op = `ABSop;  src1 = 32'h8000_0000; src2 = 32'h0000_0000;  ops = "ABSop";
 //#10				  alu_op = `SLLop;  src1 = 32'h8000_0000; src2 = 32'h0001_0000;  ops = "SLLop";
-//#10				  alu_op = `ROTLop;  src1 = 32'h00bc_614e; src2 = 32'h0000_0004;  ops = "ROTLop";
+#10				  alu_op = `ROTLop;  src1 = 32'hddef_bf7f; src2 = 32'h0000_0005;  ops = "ROTLop";
+#10				  alu_op = `ROTLop;  src1 = 32'hd5ef_617f; src2 = 32'h0000_0015;  ops = "ROTLop";
+#10				  alu_op = `ADDUop; src1 = 32'hffff_ffff; src2 = 32'h0000_00ff;  ops = "ADDUop";
+#10				  alu_op = `ADDUop; src1 = 32'hffff_ff00; src2 = 32'h0000_0100;  ops = "ADDUop";
 
 #10  $finish;
 end
