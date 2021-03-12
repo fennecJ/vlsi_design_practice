@@ -92,7 +92,12 @@ always@(*)begin
 				 end
 	  `SLTSop :  alu_out = ($signed(src1) < $signed(src2)) ? 1'b1 : 1'b0;
 	  `SLLop  :  alu_out = src1 <<< src2; 
-	  //`ROTLop :
+	  `ROTLop :  begin
+				 temp = {src1,src1};
+				 temp = temp << (src2 % 32);
+				 alu_out = temp[31:0];
+ 				 end
+				 
 /************************************/
 
       endcase
