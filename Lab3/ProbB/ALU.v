@@ -86,6 +86,10 @@ always@(*)begin
 	  `NANDop :  alu_out = ~(src1 & src2);
 	  `MAXop  :  alu_out = ($signed(src1) > $signed(src2)) ? src1 : src2;
 	  `MINop  :  alu_out = ($signed(src1) < $signed(src2)) ? src1 : src2;
+	  `ABSop  :  begin
+				 alu_out = (src1 & 32'h8000_0000) ? (~src1 + 1) : src1;
+				 alu_overflow = (alu_out & 32'h8000_0000)? 1'b1 : 1'b0;
+				 end
 
 /************************************/
 
