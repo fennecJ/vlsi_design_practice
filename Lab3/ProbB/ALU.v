@@ -103,7 +103,7 @@ always@(*)begin
 //				 if(src1[31] == 1'b1 || src2[31] == 1'b1 && alu_out[31] == 1'b0)
 //					 alu_overflow = 1;
 				 end
-				 
+	  `SRLUop  : alu_out = src1 >> src2;			 
 /************************************/
 
       endcase
