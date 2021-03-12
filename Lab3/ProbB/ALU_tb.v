@@ -68,10 +68,15 @@ initial begin
 #10				  alu_op = `MAXop;  src1 = 32'h8000_1234; src2 = 32'h0fff_0111;  ops = "MAXop";
 #10				  alu_op = `MINop;  src1 = 32'h0fff_0111; src2 = 32'h8000_1234;  ops = "MINop";
 #10				  alu_op = `ABSop;  src1 = 32'hffff_ffff; src2 = 32'h0000_0000;  ops = "ABSop";
+#10				  alu_op = `SLTSop; src1 = 32'h8000_1234; src2 = 32'h0fff_0111;  ops = "SLTSop";
+#10				  alu_op = `SLLop;  src1 = 32'hff00_00ff; src2 = 32'h0000_0002;  ops = "SLLop";
+
 //  Done by students
-//Other test data
-#10				  alu_op = `ABSop;  src1 = 32'h8000_0000; src2 = 32'h0000_0000;  ops = "ABSop";
-//
+
+//  Other test data
+//#10				  alu_op = `ABSop;  src1 = 32'h8000_0000; src2 = 32'h0000_0000;  ops = "ABSop";
+
+
 #10  $finish;
 end
 
