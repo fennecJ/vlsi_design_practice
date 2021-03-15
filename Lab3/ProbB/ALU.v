@@ -99,7 +99,7 @@ always@(*)begin
  				 end
       `ADDUop  :  begin
 				 alu_out = src1 + src2;
-				 alu_overflow = ((src1[31] | src2[31]) <= alu_out[31])? 0 : 1;
+				 alu_overflow = ((src1[31] | src2[31]) <= alu_out[31])? 1'b0 : 1'b1;
 //				 if(src1[31] == 1'b1 || src2[31] == 1'b1 && alu_out[31] == 1'b0)
 //					 alu_overflow = 1;
 				 end
