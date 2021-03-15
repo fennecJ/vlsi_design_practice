@@ -104,6 +104,8 @@ always@(*)begin
 //					 alu_overflow = 1;
 				 end
 	  `SRLUop  : alu_out = src1 >> src2;			 
+	  default  :
+				 alu_out = 32'b0;
 /************************************/
 
       endcase
