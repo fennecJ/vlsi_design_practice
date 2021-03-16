@@ -3,9 +3,9 @@
 Some simple verilog practice
 
 ## Lab2
-###ProbA
+### ProbA
 Implement a 4x2 priority encoder in gate level
-###ProbB
+### ProbB
 Implement a Full Adder in gate level
-###ProbC 
+### ProbC 
 Implement a 5 bits ripple adder with hierarchy skills in gate level
