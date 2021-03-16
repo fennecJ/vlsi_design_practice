@@ -1,4 +1,5 @@
-# A set of verilog practicce codes from NCKU "Introduction to vlsi design"
+# A set of verilog practice codes 
+# Course name "Introduction to vlsi design" from NCKU 
 ## Lab1
 Some simple verilog practice
 
