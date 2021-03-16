@@ -104,5 +104,6 @@ fi
 #ALL Check
 if [ $ProbA_error -eq 0 ] && [ $ProbB_error -eq 0 ] && [ $ProbC_error -eq 0 ]; then
 	echo -e "${BLUE}Congratulation!! ALL files check pass!! ${NORMAL}"
+	echo -e "${RED}Don't forget to remove check.sh before you archive your files into ${labname}_${student}.tar"
 fi
 
