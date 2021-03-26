@@ -20,11 +20,11 @@ module PRelu(in,out);
   reg[`Pixel_DataSize*2:0] tmp;
   // ---------------------- Write down Your design below  ---------------------- //
   always @(*) begin
-    if(in > 0)begin
-    out <= in;
+    if(in > 17'b0)begin
+    out = in;
     end
     else begin
-    out <= (in>>>6);
+    out = (in>>>6);
     end
   end
   endmodule
