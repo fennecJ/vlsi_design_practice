@@ -54,13 +54,13 @@ module mini_vending(clk,rst,en,money,beverage,change,finish);
   end
 
   // change and finish
-  always@(*)begin
+  always@(posedge clk)begin
      if(phase == 2'd2) begin
-        change = money_temp;
-        finish = 1'b1;
+        change <= money_temp;
+        finish <= 1'b1;
      end
      else begin
-        finish = 1'b0;
+        finish <= 1'b0;
      end
   end
 
