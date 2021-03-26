@@ -41,7 +41,9 @@ always@(*)begin
 		change = money_temp;
 		finish = 1'b1;
 	 end
-	 else
+	 else begin
+		change = money_temp;
         finish = 1'b0;
+end
 end
 endmodule
