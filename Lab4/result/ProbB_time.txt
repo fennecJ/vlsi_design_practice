@@ -6,7 +6,7 @@ Report : timing
         -sort_by group
 Design : mini_vending
 Version: O-2018.06
-Date   : Fri Mar 26 22:10:55 2021
+Date   : Sat Mar 27 00:37:23 2021
 ****************************************
 
 Operating Conditions: slow   Library: slow
@@ -38,20 +38,20 @@ Wire Load Model Mode: top
   sub_32/U2_5/Y (XOR3X1)                                  0.44       8.33 r
   sub_32/DIFF[5] (mini_vending_DW01_sub_0)                0.00       8.33 r
   U31/Y (AOI22X1)                                         0.15       8.48 f
-  U30/Y (OAI21XL)                                         0.31       8.79 r
-  money_temp_reg[5]/D (DFFRX1)                            0.00       8.79 r
-  data arrival time                                                  8.79
+  U30/Y (OAI21XL)                                         0.32       8.80 r
+  money_temp_reg[5]/D (DFFRX2)                            0.00       8.80 r
+  data arrival time                                                  8.80
 
   clock clk (rise edge)                                  10.00      10.00
   clock network delay (ideal)                             0.50      10.50
   clock uncertainty                                      -0.10      10.40
-  money_temp_reg[5]/CK (DFFRX1)                           0.00      10.40 r
-  library setup time                                     -0.29      10.11
-  data required time                                                10.11
+  money_temp_reg[5]/CK (DFFRX2)                           0.00      10.40 r
+  library setup time                                     -0.23      10.17
+  data required time                                                10.17
   --------------------------------------------------------------------------
-  data required time                                                10.11
-  data arrival time                                                 -8.79
+  data required time                                                10.17
+  data arrival time                                                 -8.80
   --------------------------------------------------------------------------
-  slack (MET)                                                        1.32
+  slack (MET)                                                        1.37
 
 
