@@ -34,13 +34,14 @@ module mini_vending(clk,rst,en,money,beverage,change,finish);
       else if(phase == 2'd2) begin
           phase <= 2'd0;
           money_temp <= 6'd0;
-      end
-	  else if(phase == 2'd2) begin
-        change <= money_temp;
-        finish <= 1'b1;
      end
-     else begin
-        finish <= 1'b0;
-     end
+end
+always@(*)begin    
+	if(phase == 2'd2) begin
+		change = money_temp;
+		finish = 1'b1;
+	 end
+	 else
+        finish = 1'b0;
 end
 endmodule
