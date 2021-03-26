@@ -4,3 +4,5 @@
 !*.sh
 !*.doc
 !*.png
+!Lab*/
+!Prob*/
