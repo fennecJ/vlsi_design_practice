@@ -1,7 +1,7 @@
 (DELAYFILE
 (SDFVERSION "OVI 2.1")
 (DESIGN "mini_vending")
-(DATE "Sat Mar 27 00:38:48 2021")
+(DATE "Sat Mar 27 01:00:32 2021")
 (VENDOR "slow")
 (PROGRAM "Synopsys Design Compiler cmos")
 (VERSION "O-2018.06")

@@ -4,5 +4,11 @@
 !*.sh
 !*.doc
 !*.png
+!*.sdc
+!*.setup
 !Lab*/
 !Prob*/
+!result/
+!*.txt
+!*.sdf
+!*.setup
