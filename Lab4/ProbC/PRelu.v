@@ -17,14 +17,14 @@ module PRelu(in,out);
 
   // ----------------------  reg   ---------------------- //
   reg signed		[`Pixel_DataSize*2:0]	out;
-  reg[`Pixel_DataSize*2:0] tmp;
+  reg signed		[`Pixel_DataSize*2:0]	tmp;
   // ---------------------- Write down Your design below  ---------------------- //
   always @(*) begin
-    if(in > 17'b0)begin
+  tmp = 17'b0;
+    if(in > tmp)
     out = in;
-    end
-    else begin
+    else 
     out = (in>>>6);
-    end
+    
   end
   endmodule
