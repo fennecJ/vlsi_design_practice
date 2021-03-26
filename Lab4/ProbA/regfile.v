@@ -42,10 +42,28 @@ integer i;
 // ----------please write your code here--------------- //
 always@(posedge clk or posedge rst)
 begin
-	if(i=0;<`RegSize;i=i+1)
-		REG[i]<=32'b0;
-	src1<=32'b0;
-	src2<=32'b0;
+	if(rst)begin
+		for(i=0;i<`RegSize;i=i+1)
+			REG[i]<=32'b0;
+		src1<=32'b0;
+		src2<=32'b0;
+	end
+	else begin
+		if(reg_enable)begin
+			if(reg_write)
+				REG[write_addr] <= write_data;
+			else begin
+				src1 <= REG[src1_addr];
+				src2 <= REG[src2_addr];
+			end
+		end
+		else begin
+			src1<=32'b0;
+			src2<=32'b0;
+		end
+	end
+end
+
 
 
 endmodule
