@@ -2,7 +2,7 @@
 Report : area
 Design : mini_vending
 Version: O-2018.06
-Date   : Sat Mar 27 11:02:01 2021
+Date   : Sat Mar 27 13:43:18 2021
 ****************************************
 
 Library(s) Used:
