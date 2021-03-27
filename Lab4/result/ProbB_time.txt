@@ -6,7 +6,7 @@ Report : timing
         -sort_by group
 Design : mini_vending
 Version: O-2018.06
-Date   : Sat Mar 27 00:37:23 2021
+Date   : Sat Mar 27 11:01:46 2021
 ****************************************
 
 Operating Conditions: slow   Library: slow
@@ -29,18 +29,18 @@ Wire Load Model Mode: top
   clock network delay (ideal)                             0.50       0.50
   input external delay                                    5.00       5.50 f
   beverage[1] (in)                                        0.01       5.51 f
-  sub_32/B[1] (mini_vending_DW01_sub_0)                   0.00       5.51 f
-  sub_32/U4/Y (CLKINVX1)                                  0.08       5.59 r
-  sub_32/U2_1/CO (ADDFXL)                                 0.80       6.39 r
-  sub_32/U2_2/CO (ADDFXL)                                 0.50       6.89 r
-  sub_32/U2_3/CO (ADDFXL)                                 0.50       7.39 r
-  sub_32/U2_4/CO (ADDFXL)                                 0.50       7.89 r
-  sub_32/U2_5/Y (XOR3X1)                                  0.44       8.33 r
-  sub_32/DIFF[5] (mini_vending_DW01_sub_0)                0.00       8.33 r
-  U31/Y (AOI22X1)                                         0.15       8.48 f
-  U30/Y (OAI21XL)                                         0.32       8.80 r
-  money_temp_reg[5]/D (DFFRX2)                            0.00       8.80 r
-  data arrival time                                                  8.80
+  sub_33/B[1] (mini_vending_DW01_sub_0)                   0.00       5.51 f
+  sub_33/U4/Y (CLKINVX1)                                  0.08       5.59 r
+  sub_33/U2_1/CO (ADDFXL)                                 0.80       6.39 r
+  sub_33/U2_2/CO (ADDFXL)                                 0.50       6.89 r
+  sub_33/U2_3/CO (ADDFXL)                                 0.50       7.39 r
+  sub_33/U2_4/CO (ADDFXL)                                 0.50       7.89 r
+  sub_33/U2_5/Y (XOR3X1)                                  0.44       8.33 r
+  sub_33/DIFF[5] (mini_vending_DW01_sub_0)                0.00       8.33 r
+  U34/Y (AOI22X1)                                         0.18       8.51 f
+  U33/Y (OAI21XL)                                         0.30       8.82 r
+  money_temp_reg[5]/D (DFFRX2)                            0.00       8.82 r
+  data arrival time                                                  8.82
 
   clock clk (rise edge)                                  10.00      10.00
   clock network delay (ideal)                             0.50      10.50
@@ -50,8 +50,8 @@ Wire Load Model Mode: top
   data required time                                                10.17
   --------------------------------------------------------------------------
   data required time                                                10.17
-  data arrival time                                                 -8.80
+  data arrival time                                                 -8.82
   --------------------------------------------------------------------------
-  slack (MET)                                                        1.37
+  slack (MET)                                                        1.35
 
 

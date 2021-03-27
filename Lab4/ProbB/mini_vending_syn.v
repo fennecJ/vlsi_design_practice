@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////
 // Created by: Synopsys DC Expert(TM) in wire load mode
 // Version   : O-2018.06
-// Date      : Sat Mar 27 00:38:00 2021
+// Date      : Sat Mar 27 11:02:22 2021
 /////////////////////////////////////////////////////////////
 
 
@@ -37,49 +37,49 @@ module mini_vending ( clk, rst, en, money, beverage, change, finish );
   output [5:0] change;
   input clk, rst, en;
   output finish;
-  wire   N9, N10, N11, N12, N13, N14, n3, n4, n5, n8, n9, n10, n11, n12, n13,
-         n15, n16, n17, n18, n19, n20, n22, n23, n24, n25, n26, n27, n28, n29,
-         n31, n32, n33, n34;
+  wire   N7, N8, N9, N10, N11, N12, n3, n4, n7, n9, n10, n11, n12, n13, n14,
+         n15, n16, n17, n18, n19, n20, n21, n23, n24, n25, n26, n27, n28, n29,
+         n30, n32, n33, n34, n35;
   wire   [1:0] phase;
 
-  mini_vending_DW01_sub_0 sub_32 ( .A(change), .B(beverage), .CI(1'b0), .DIFF(
-        {N14, N13, N12, N11, N10, N9}) );
-  DFFRX2 \money_temp_reg[3]  ( .D(n24), .CK(clk), .RN(n33), .Q(change[3]), 
-        .QN(n17) );
-  DFFRX2 \money_temp_reg[4]  ( .D(n23), .CK(clk), .RN(n33), .Q(change[4]), 
-        .QN(n16) );
-  DFFRX2 \money_temp_reg[5]  ( .D(n22), .CK(clk), .RN(n33), .Q(change[5]), 
-        .QN(n15) );
-  DFFRX1 \phase_reg[1]  ( .D(n28), .CK(clk), .RN(n33), .Q(phase[1]), .QN(n32)
-         );
-  DFFRX2 \money_temp_reg[1]  ( .D(n26), .CK(clk), .RN(n33), .Q(change[1]), 
-        .QN(n19) );
-  DFFRX2 \money_temp_reg[2]  ( .D(n25), .CK(clk), .RN(n33), .Q(change[2]), 
+  mini_vending_DW01_sub_0 sub_33 ( .A(change), .B(beverage), .CI(1'b0), .DIFF(
+        {N12, N11, N10, N9, N8, N7}) );
+  DFFRX2 \money_temp_reg[3]  ( .D(n25), .CK(clk), .RN(n34), .Q(change[3]), 
         .QN(n18) );
-  DFFRX2 \money_temp_reg[0]  ( .D(n27), .CK(clk), .RN(n33), .Q(change[0]), 
-        .QN(n20) );
-  DFFRX1 \phase_reg[0]  ( .D(n29), .CK(clk), .RN(n33), .Q(phase[0]), .QN(n31)
+  DFFRX2 \money_temp_reg[4]  ( .D(n24), .CK(clk), .RN(n34), .Q(change[4]), 
+        .QN(n17) );
+  DFFRX2 \money_temp_reg[5]  ( .D(n23), .CK(clk), .RN(n34), .Q(change[5]), 
+        .QN(n16) );
+  DFFRX1 \phase_reg[1]  ( .D(n29), .CK(clk), .RN(n34), .Q(phase[1]), .QN(n33)
          );
-  NOR2X2 U26 ( .A(n3), .B(n31), .Y(n4) );
-  CLKINVX1 U27 ( .A(n3), .Y(n34) );
-  OAI32X4 U28 ( .A0(en), .A1(phase[1]), .A2(phase[0]), .B0(n31), .B1(n32), .Y(
-        n3) );
-  NOR3X2 U29 ( .A(phase[0]), .B(phase[1]), .C(n3), .Y(n5) );
-  OAI21XL U30 ( .A0(n15), .A1(n34), .B0(n8), .Y(n22) );
-  AOI22X1 U31 ( .A0(N14), .A1(n4), .B0(money[5]), .B1(n5), .Y(n8) );
-  OAI21XL U32 ( .A0(n16), .A1(n34), .B0(n9), .Y(n23) );
-  AOI22X1 U33 ( .A0(N13), .A1(n4), .B0(money[4]), .B1(n5), .Y(n9) );
-  OAI21XL U34 ( .A0(n17), .A1(n34), .B0(n10), .Y(n24) );
-  AOI22X1 U35 ( .A0(N12), .A1(n4), .B0(money[3]), .B1(n5), .Y(n10) );
-  OAI21XL U36 ( .A0(n18), .A1(n34), .B0(n11), .Y(n25) );
-  AOI22X1 U37 ( .A0(N11), .A1(n4), .B0(money[2]), .B1(n5), .Y(n11) );
-  OAI21XL U38 ( .A0(n19), .A1(n34), .B0(n12), .Y(n26) );
-  AOI22X1 U39 ( .A0(N10), .A1(n4), .B0(money[1]), .B1(n5), .Y(n12) );
-  OAI21XL U40 ( .A0(n20), .A1(n34), .B0(n13), .Y(n27) );
-  AOI22X1 U41 ( .A0(N9), .A1(n4), .B0(money[0]), .B1(n5), .Y(n13) );
-  AO21X1 U42 ( .A0(n3), .A1(phase[1]), .B0(n4), .Y(n28) );
-  AO21X1 U43 ( .A0(n3), .A1(phase[0]), .B0(n5), .Y(n29) );
-  NOR2X2 U44 ( .A(phase[0]), .B(n32), .Y(finish) );
-  INVX3 U45 ( .A(rst), .Y(n33) );
+  DFFRX1 \phase_reg[0]  ( .D(n30), .CK(clk), .RN(n34), .Q(phase[0]), .QN(n32)
+         );
+  DFFRX2 \money_temp_reg[1]  ( .D(n27), .CK(clk), .RN(n34), .Q(change[1]), 
+        .QN(n20) );
+  DFFRX2 \money_temp_reg[2]  ( .D(n26), .CK(clk), .RN(n34), .Q(change[2]), 
+        .QN(n19) );
+  DFFRX2 \money_temp_reg[0]  ( .D(n28), .CK(clk), .RN(n34), .Q(change[0]), 
+        .QN(n21) );
+  NOR2X2 U27 ( .A(n3), .B(n32), .Y(n4) );
+  NOR2X2 U28 ( .A(n3), .B(n7), .Y(n10) );
+  CLKINVX1 U29 ( .A(n3), .Y(n35) );
+  OAI22XL U30 ( .A0(n35), .A1(n32), .B0(n7), .B1(n3), .Y(n30) );
+  NAND2X1 U31 ( .A(n32), .B(n33), .Y(n7) );
+  OAI22X2 U32 ( .A0(n32), .A1(n33), .B0(en), .B1(n7), .Y(n3) );
+  OAI21XL U33 ( .A0(n16), .A1(n35), .B0(n9), .Y(n23) );
+  AOI22X1 U34 ( .A0(money[5]), .A1(n10), .B0(N12), .B1(n4), .Y(n9) );
+  OAI21XL U35 ( .A0(n17), .A1(n35), .B0(n11), .Y(n24) );
+  AOI22X1 U36 ( .A0(money[4]), .A1(n10), .B0(N11), .B1(n4), .Y(n11) );
+  OAI21XL U37 ( .A0(n18), .A1(n35), .B0(n12), .Y(n25) );
+  AOI22X1 U38 ( .A0(money[3]), .A1(n10), .B0(N10), .B1(n4), .Y(n12) );
+  OAI21XL U39 ( .A0(n19), .A1(n35), .B0(n13), .Y(n26) );
+  AOI22X1 U40 ( .A0(money[2]), .A1(n10), .B0(N9), .B1(n4), .Y(n13) );
+  OAI21XL U41 ( .A0(n20), .A1(n35), .B0(n14), .Y(n27) );
+  AOI22X1 U42 ( .A0(money[1]), .A1(n10), .B0(N8), .B1(n4), .Y(n14) );
+  OAI21XL U43 ( .A0(n21), .A1(n35), .B0(n15), .Y(n28) );
+  AOI22X1 U44 ( .A0(money[0]), .A1(n10), .B0(N7), .B1(n4), .Y(n15) );
+  AO21X1 U45 ( .A0(n3), .A1(phase[1]), .B0(n4), .Y(n29) );
+  NOR2X2 U46 ( .A(phase[0]), .B(n33), .Y(finish) );
+  INVX3 U47 ( .A(rst), .Y(n34) );
 endmodule
 
