@@ -1,9 +1,9 @@
 ****************************************
 Report : power
         -analysis_effort low
-Design : CONV
+Design : top
 Version: O-2018.06
-Date   : Sat Mar 27 01:31:08 2021
+Date   : Sat Mar 27 11:32:46 2021
 ****************************************
 
 
@@ -17,7 +17,7 @@ Wire Load Model Mode: top
 
 Design        Wire Load Model            Library
 ------------------------------------------------
-CONV                   tsmc13_wl10       slow
+top                    tsmc13_wl10       slow
 
 
 Global Operating Voltage = 1.08 
@@ -29,12 +29,12 @@ Power-specific unit information :
     Leakage Power Units = 1pW
 
 
-  Cell Internal Power  = 545.8027 uW   (71%)
-  Net Switching Power  = 222.4391 uW   (29%)
+  Cell Internal Power  = 783.1615 uW   (56%)
+  Net Switching Power  = 624.4791 uW   (44%)
                          ---------
-Total Dynamic Power    = 768.2419 uW  (100%)
+Total Dynamic Power    =   1.4076 mW  (100%)
 
-Cell Leakage Power     =  32.3506 uW
+Cell Leakage Power     =  34.6410 uW
 
 
                  Internal         Switching           Leakage            Total
@@ -44,8 +44,8 @@ io_pad             0.0000            0.0000            0.0000            0.0000 
 memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
 black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
 clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
-register           0.3907        3.2932e-02        4.2484e+06            0.4279  (  53.45%)
+register           0.4238        2.3153e-02        4.0107e+06            0.4509  (  31.27%)
 sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
-combinational      0.1551            0.1895        2.8102e+07            0.3727  (  46.55%)
+combinational      0.3594            0.6013        3.0630e+07            0.9913  (  68.73%)
 --------------------------------------------------------------------------------------------------
-Total              0.5458 mW         0.2224 mW     3.2351e+07 pW         0.8006 mW
+Total              0.7832 mW         0.6245 mW     3.4641e+07 pW         1.4423 mW
