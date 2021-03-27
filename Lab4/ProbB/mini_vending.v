@@ -23,18 +23,20 @@ module mini_vending(clk,rst,en,money,beverage,change,finish);
           phase <= 2'd0;
           money_temp <= 6'd0;
        end
-       else if(phase == 2'd0 && en == 1'b1) begin
+       else  begin
+		if(phase == 2'd0 && en == 1'b1) begin
          phase <= 2'd1;
          money_temp <= money;
        end
-       else if(phase == 2'd1) begin
+        if(phase == 2'd1) begin
           phase <= 2'd2;
           money_temp <= money_temp - beverage; 
        end
-      else if(phase == 2'd2) begin
+       if(phase == 2'd2) begin
           phase <= 2'd0;
           money_temp <= 6'd0;
      end
+		end
 end
 always@(*)begin    
 	if(phase == 2'd2) begin
