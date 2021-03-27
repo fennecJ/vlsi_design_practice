@@ -16,8 +16,12 @@
 
 `timescale 1ns/10ps
 
+`ifndef syn
 `include "top.v"
-
+`else
+`include "top_syn.v"
+`include "/usr/cad/CBDK/CBDK_IC_Contest_v2.1/Verilog/tsmc13_neg.v"
+`endif
 
 // ---------------------- define ---------------------- //
 `define Pixel_DataSize	8
@@ -124,4 +128,7 @@ initial begin
 	$fsdbDumpvars;
 	`endif
 end
+ `ifdef syn
+    initial $sdf_annotate("top_syn.sdf",t);
+ `endif
 endmodule
