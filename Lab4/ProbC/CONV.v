@@ -45,7 +45,18 @@ module CONV(clk, rst, w_w, if_w, w_in0, w_in1, w_in2, w_in3, w_in4, w_in5, w_in6
           w_in[7]<=w_in7;
           w_in[8]<=w_in8;
       end
-      if(if_w)begin
+	  else if(rst) begin
+          w_in[0]<=8'b0;
+          w_in[1]<=8'b0;
+          w_in[2]<=8'b0;
+          w_in[3]<=8'b0;
+          w_in[4]<=8'b0;
+          w_in[5]<=8'b0;
+          w_in[6]<=8'b0;
+          w_in[7]<=8'b0;
+          w_in[8]<=8'b0;
+	  end
+      if(if_w) begin
           if_in[0]<=if_in0;
           if_in[1]<=if_in1;
           if_in[2]<=if_in2;
@@ -55,7 +66,18 @@ module CONV(clk, rst, w_w, if_w, w_in0, w_in1, w_in2, w_in3, w_in4, w_in5, w_in6
           if_in[6]<=if_in6;
           if_in[7]<=if_in7;
           if_in[8]<=if_in8;
-	  end       
+	  end      
+	  else if(rst)begin 
+          if_in[0]<=8'b0;
+          if_in[1]<=8'b0;
+          if_in[2]<=8'b0;
+          if_in[3]<=8'b0;
+          if_in[4]<=8'b0;
+          if_in[5]<=8'b0;
+          if_in[6]<=8'b0;
+          if_in[7]<=8'b0;
+          if_in[8]<=8'b0;
+	  end
 	  //$display("%d ",w_in[0]*if_in[0] + w_in[1]*if_in[1] + w_in[2]*if_in[2] + w_in[3]*if_in[3] + w_in[4]*if_in[4] + w_in[5]*if_in[5] + w_in[6]*if_in[6] + w_in[7]*if_in[7] + w_in[8]*if_in[8]);
 	  end
 
