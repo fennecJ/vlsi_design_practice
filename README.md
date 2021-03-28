@@ -21,3 +21,14 @@ A simple ALU instruction set
 #### ProbC
 A simple grayscale module using shift to map 24 bits r,g,b color into 8 bits 
 The result is approximation due to loss of shift operation
+
+### Lab4
+#### ProbA
+A simple model for a 64*32 register file
+#### ProbB
+A simple model for a vending machine which can do:<br>
+Get input money<br>
+Get price of selected beverage<br>
+Output the change = money - price<br>
+#### ProbC
+A simple convolution model
