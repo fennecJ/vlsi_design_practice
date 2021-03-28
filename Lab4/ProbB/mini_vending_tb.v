@@ -80,7 +80,10 @@ module det_1001_tb();
    golden[8] = 16;
    golden[9] = 37;
 end
-
+initial begin
+ $timeformat(-9, 2, " ns", 20);
+ $monitor("Time %0t\nen = %b, rst = %b\nmoney = %d, beverage = %d, change = %d\n",$time,en,rst,money, beverage, change);
+end
 
   initial begin
     err = 0;
