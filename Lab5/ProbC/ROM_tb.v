@@ -31,7 +31,9 @@ module ROM_tb;
     #20 rst = 1;
     #40 rst = 0; read_enable = 1;
     // Please add some test pattern to verify your module
-    #20 for(i=0;i<16384;i=i+1)
+    #20 for(i=0;i<=16384;i=i+1)
+        if(i%1024==0)
+        $display($time, "ns RAM[%d]=%h, ", i, rom1.memory[i]);
         if(rom1.memory[i]!=i) begin
         $display($time, "ns Error at RAM[%d]=%h, ", i, rom1.memory[i]);
         err = err + 1;
