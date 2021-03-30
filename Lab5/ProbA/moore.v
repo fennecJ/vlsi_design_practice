@@ -34,17 +34,21 @@ module moore (clk, rst, din, qout);
 
   always @(cs or din) begin//ns case
     case (cs)
-    //
-    //please write your code here according to the assignment
-    //
+    s0: ns = (din == 0)?s2:s1;
+    s1: ns = (din == 0)?s1:s0;
+    s2: ns = (din == 0)?s3:s2;
+    s3: ns = (din == 0)?s3:s1;
+    default: ns = s0;
     endcase
   end
 
   always @(cs) begin//qout case
     case (cs)
-    //
-    //please write your code here according to the assignment
-    //
+    s0: qout = 1;
+    s1: qout = 0;
+    s2: qout = 0;
+    s3: qout = 1;
+    default: qout = 0;
     endcase
   end
 
