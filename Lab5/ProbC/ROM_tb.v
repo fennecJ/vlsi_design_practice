@@ -32,6 +32,9 @@ module ROM_tb;
     // Please add some test pattern to verify your module
 
   end
+  initial begin
+  $readmemh("ROM_data.dat",rom1.memory);
+  end
 
   initial begin
     $readmemh("ROM_data.dat",rom1.memory);
