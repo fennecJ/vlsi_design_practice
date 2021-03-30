@@ -12,7 +12,6 @@
 module RAM_tb;
 
 /*Please rewrite this example code according to the assignment*/
-
   reg        clk, read_enable, write_enable;
   reg [15:0] data_in;
   reg [3:0]  address;
@@ -25,9 +24,14 @@ module RAM_tb;
         read_enable=0;   write_enable=0;
         address=4'd0;    data_in=16'd0;
     #20 read_enable=0;   write_enable=0;
-    #20 write_enable=1;
-        address = 4'd0;  data_in=16'h0;
     // Please add some test pattern to verify your module
+      for(i=0; i<16;i=i+1)begin
+        #20 write_enable=1;
+        address = 4'd0 + i[3:0];  
+        data_in=16'h0 + i[15:0];
+        end
+    #20 read_enable=1;   
+    
 
     // Display result
     #20 for(i=0;i<16;i=i+1)
