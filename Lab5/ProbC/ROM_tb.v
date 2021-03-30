@@ -25,7 +25,7 @@ module ROM_tb;
   always #10	clk=~clk;
 
   initial begin
-        err = 0;
+        err = 0; i = 0;
         clk = 0; rst = 0;
         read_enable = 0; address = 14'd0;
     #20 rst = 1;
