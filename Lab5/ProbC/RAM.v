@@ -14,15 +14,15 @@ module RAM (CK, A, WE, OE, D, Q);
 /*Please rewrite this example code according to the assignment*/
 
   input         CK;
-  input  [3:0]  A;
+  input  [15:0]  A;
   input         WE;
   input         OE;
-  input  [15:0] D;
-  output [15:0] Q;
+  input  [23:0] D;
+  output [23:0] Q;
 
-  reg    [15:0] Q;
-  reg    [3:0]  latched_A;
-  reg    [15:0] memory [0:15];
+  reg    [23:0] Q;
+  reg    [15:0]  latched_A;
+  reg    [23:0] memory [0:65536];
 
   always @(posedge CK) begin
     if (WE) begin
@@ -37,7 +37,7 @@ module RAM (CK, A, WE, OE, D, Q);
       Q = memory[latched_A];
     end
     else begin
-      Q = 16'hz; 
+      Q = 24'hz; 
     end
   end
 
