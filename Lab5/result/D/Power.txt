@@ -1,0 +1,51 @@
+****************************************
+Report : power
+        -analysis_effort low
+Design : mac
+Version: O-2018.06
+Date   : Wed Mar 31 20:41:17 2021
+****************************************
+
+
+Library(s) Used:
+
+    slow (File: /usr/cad/CBDK/CBDK_IC_Contest_v2.1/SynopsysDC/db/slow.db)
+
+
+Operating Conditions: slow   Library: slow
+Wire Load Model Mode: top
+
+Design        Wire Load Model            Library
+------------------------------------------------
+mac                    tsmc13_wl10       slow
+
+
+Global Operating Voltage = 1.08 
+Power-specific unit information :
+    Voltage Units = 1V
+    Capacitance Units = 1.000000pf
+    Time Units = 1ns
+    Dynamic Power Units = 1mW    (derived from V,C,T units)
+    Leakage Power Units = 1pW
+
+
+  Cell Internal Power  = 447.9020 uW   (69%)
+  Net Switching Power  = 198.9825 uW   (31%)
+                         ---------
+Total Dynamic Power    = 646.8845 uW  (100%)
+
+Cell Leakage Power     =  34.5610 uW
+
+
+                 Internal         Switching           Leakage            Total
+Power Group      Power            Power               Power              Power   (   %    )  Attrs
+--------------------------------------------------------------------------------------------------
+io_pad             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+memory             0.0000            0.0000            0.0000            0.0000  (   0.00%)
+black_box          0.0000            0.0000            0.0000            0.0000  (   0.00%)
+clock_network      0.0000            0.0000            0.0000            0.0000  (   0.00%)
+register           0.3433        1.2741e-02        2.9474e+06            0.3589  (  52.67%)
+sequential         0.0000            0.0000            0.0000            0.0000  (   0.00%)
+combinational      0.1047            0.1862        3.1614e+07            0.3225  (  47.33%)
+--------------------------------------------------------------------------------------------------
+Total              0.4479 mW         0.1990 mW     3.4561e+07 pW         0.6814 mW
