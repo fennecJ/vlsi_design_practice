@@ -21,15 +21,14 @@ module RAM (CK, A, WE, OE, D, Q);
   output [23:0] Q;
 
   reg    [23:0] Q;
-  reg    [15:0]  latched_A;
-  reg    [23:0] memory [0:65536];
+  reg    [15:0] latched_A;
+  reg    [23:0] memory [65536:0];
 
   always @(posedge CK) begin
     if (WE) begin
       memory[A] <= D;
     end
     latched_A <= A;
-	
   end
 
   always @(*) begin
@@ -37,7 +36,7 @@ module RAM (CK, A, WE, OE, D, Q);
       Q = memory[latched_A];
     end
     else begin
-      Q = 24'hz; 
+      Q = 24'h0; 
     end
   end
 
