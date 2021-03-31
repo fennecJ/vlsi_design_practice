@@ -18,7 +18,7 @@ module mac(clk,rst,clear,w_w,w_in,if_w,if_in,out);
  reg signed [`DATA_BIT-1:0] weight [2:0];
  reg signed [`DATA_BIT-1:0] feature [2:0];
  reg signed [`DATA_BIT*2+1:0] out;
- 
+ reg signed [`DATA_BIT*2-1:0] tmp;
   integer i;
  // ---------------------- Write down Your design below  ---------------------- //
  always @(posedge clk)begin
@@ -48,10 +48,14 @@ module mac(clk,rst,clear,w_w,w_in,if_w,if_in,out);
     end
  end
  always @(*)begin
-   if(rst)
+   if(rst) begin
+   tmp = 32'b0;
    out = 34'b0;
-   else
-   out = feature[2]*weight[2]+feature[1]*weight[1]+feature[0]*weight[0];
+   end
+   else begin
+   tmp = feature[2]*weight[2]+feature[1]*weight[1]+feature[0]*weight[0];
+   out = (tmp<0)?({2'b11,tmp}):({2'b0,tmp});
+   end
  end
   
 endmodule
