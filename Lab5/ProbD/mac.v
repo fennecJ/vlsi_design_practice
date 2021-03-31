@@ -17,6 +17,7 @@ module mac(clk,rst,clear,w_w,w_in,if_w,if_in,out);
  // -----------------------  reg  ----------------------- //
  reg signed [`DATA_BIT-1:0] weight [2:0];
  reg signed [`DATA_BIT-1:0] feature [2:0];
+ 
 
   integer i;
  // ---------------------- Write down Your design below  ---------------------- //
@@ -41,7 +42,11 @@ always @(*)begin
       weight[1] = weight[0];
       weight[0] = w_in;
     end
-
+    if(if_w) begin
+      feature[2] = weight[1];
+      feature[1] = weight[0];
+      feature[0] = if_in;
+    end
 
 end
   
