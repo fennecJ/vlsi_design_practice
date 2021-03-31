@@ -7,7 +7,7 @@
 /////////////////////////////////////////////////////////////////////
 `define S_reset 		3'd0
 `define S_in_mem 		3'd1
-`define S_write_back 	3'd2
+`define S_out_mem 	3'd2
 `define S_branch1 		3'd3
 `define S_done 		    3'd4
 `define size 480000
@@ -39,7 +39,88 @@ module controller(clk,
   output 		done; 
 
 // --------------- below is your design --------------- //
-  
+  reg [2:0]	cs,ns;
+  reg [31:0]	in_mem_addr;
+  reg [31:0]	out_mem_addr;
+  integer count;
+  reg en_in_mem,en_out_mem,out_mem_read,out_mem_write,done;
+always @(posedge clk)begin
+  if(rst)
+    cs<=`S_reset;
+  else
+    cs<=ns;
+  case(cs)
+    `S_reset:
+	count <= 0;
+    `S_in_mem:
+	count <=count+1;
+    endcase	
+
+
+end
+always @(*)begin
+    case(cs)
+    `S_reset:
+	begin
+	en_in_mem=1'b0;
+	en_out_mem=1'b0;
+	out_mem_read=1'b0;
+	out_mem_write=1'b0;
+	done=1'b0;
+	ns = `S_in_mem;
+	end
+    `S_in_mem:
+	begin
+	en_in_mem=1'b1;
+	en_out_mem=1'b0;
+	out_mem_read=1'b0;
+	out_mem_write=1'b0;
+	in_mem_addr = count;
+	done=1'b0;
+	ns = `S_out_mem;
+	end
+    `S_out_mem:
+	begin
+	en_in_mem=1'b0;
+	en_out_mem=1'b1;
+	out_mem_read=1'b0;
+	out_mem_write=1'b1;
+	out_mem_addr = count;
+	done=1'b0;
+	ns = `S_branch1;
+	end
+    `S_branch1:
+	begin
+	en_in_mem=1'b0;
+	en_out_mem=1'b0;
+	out_mem_read=1'b0;
+	out_mem_write=1'b0;
+	done=1'b0;
+	ns =(count==480000)?`S_in_mem:`S_done;
+	end
+    `S_done:
+	begin
+	en_in_mem=1'b0;
+	en_out_mem=1'b0;
+	out_mem_read=1'b0;
+	out_mem_write=1'b0;
+	done=1'b1;
+//	ns = `S_in_mem;
+	end
+    default:
+	begin
+	en_in_mem=1'b0;
+	en_out_mem=1'b0;
+	out_mem_read=1'b0;
+	out_mem_write=1'b0;
+	done=1'b0;
+	ns = `S_branch1;
+	end
+    endcase	
+end
+
+
+
 endmodule
 // ------------------ the end of code ------------------ //
   
