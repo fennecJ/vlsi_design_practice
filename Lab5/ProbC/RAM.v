@@ -22,7 +22,7 @@ module RAM (CK, A, WE, OE, D, Q);
 
   reg    [23:0] Q;
   reg    [15:0] latched_A;
-  reg    [23:0] memory [65536:0];
+  reg    [23:0] memory [65535:0];
 
   always @(posedge CK) begin
     if (WE) begin
