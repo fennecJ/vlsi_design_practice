@@ -22,7 +22,7 @@ integer i;
  // ---------------------- Write down Your design below  ---------------------- //
  always @(posedge clk or posedge rst or posedge clear)begin
    if(rst)begin
-    out <= 18'b0;
+    out <= 34'b0;
     for(i = 0; i < 3;i=i+1)begin
       weight[i] <= `DATA_BIT'b0;
       feature[i] <= `DATA_BIT'b0;
@@ -37,7 +37,7 @@ integer i;
     else begin
 
     end
- 
+
  end
 
   
