@@ -24,7 +24,6 @@ module moore (clk, rst, din, qout);
             s1 = 2'b01,
             s2 = 2'b10,
             s3 = 2'b11;
-
   always @(posedge clk or posedge rst) begin
     if (rst)
       cs <= s0;
@@ -34,21 +33,19 @@ module moore (clk, rst, din, qout);
 
   always @(cs or din) begin//ns case
     case (cs)
-    s0: ns = (din == 0)?s2:s1;
-    s1: ns = (din == 0)?s1:s0;
-    s2: ns = (din == 0)?s3:s2;
-    s3: ns = (din == 0)?s3:s1;
-    default: ns = s0;
+    s0: ns = (din == 1'b0)?s2:s1;
+    s1: ns = (din == 1'b0)?s1:s0;
+    s2: ns = (din == 1'b0)?s3:s2;
+    s3: ns = (din == 1'b0)?s3:s1;
     endcase
   end
 
   always @(cs) begin//qout case
     case (cs)
-    s0: qout = 1;
-    s1: qout = 0;
-    s2: qout = 0;
-    s3: qout = 1;
-    default: qout = 0;
+    s0: qout = 1'b1;
+    s1: qout = 1'b0;
+    s2: qout = 1'b0;
+    s3: qout = 1'b1;
     endcase
   end
 
