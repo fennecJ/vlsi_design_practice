@@ -36,7 +36,7 @@ module RAM (CK, A, WE, OE, D, Q);
       Q = memory[latched_A];
     end
     else begin
-      Q = 24'hz; 
+      Q = 24'h0; 
     end
   end
 
