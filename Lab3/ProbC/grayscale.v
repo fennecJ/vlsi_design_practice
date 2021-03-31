@@ -11,7 +11,7 @@ module grayscale(color,gray);
 /************ your code **************/
 
 
-always @(*) begin
+always @(color) begin
 {r,g,b} = {color[7:0],color[15:8],color[23:16]};
 test1 =  (r<<2)+(r)+(g<<3)+(g)+(b<<1);
 test1 = (test1[3]==1'b1) ? (test1>>4)+12'b1 : test1>>4;
