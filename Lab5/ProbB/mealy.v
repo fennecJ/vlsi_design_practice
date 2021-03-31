@@ -37,9 +37,9 @@ module mealy (clk, rst, din, qout);
   always @(cs or din) begin//ns case
   
     case (cs)
-    s0: ns = (din == 0)?s1:s2;
-    s1: ns = (din == 0)?s1:s2;  
-    s2: ns = (din == 0)?s2:s0;
+    s0: ns = (din == 1'b0)?s1:s2;
+    s1: ns = (din == 1'b0)?s1:s2;  
+    s2: ns = (din == 1'b0)?s2:s0;
     default: ns = s0;
     endcase
   end
@@ -47,10 +47,10 @@ module mealy (clk, rst, din, qout);
   always @(cs or din) begin//qout case
   
     case (cs)
-    s0: qout =(din == 0)?0:0;
-    s1: qout =(din == 0)?1:0;
-    s2: qout =(din == 0)?0:1;
-    default: qout = 0;
+    s0: qout =(din == 1'b0)?1'b0:1'b0;
+    s1: qout =(din == 1'b0)?1'b1:1'b0;
+    s2: qout =(din == 1'b0)?1'b0:1'b1;
+    default: qout = 1'b0;
     endcase
   end
 
