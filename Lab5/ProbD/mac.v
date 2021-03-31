@@ -17,13 +17,12 @@ module mac(clk,rst,clear,w_w,w_in,if_w,if_in,out);
  // -----------------------  reg  ----------------------- //
  reg signed [`DATA_BIT-1:0] weight [2:0];
  reg signed [`DATA_BIT-1:0] feature [2:0];
- 
+ reg signed [`DATA_BIT*2+1:0] out;
 
   integer i;
  // ---------------------- Write down Your design below  ---------------------- //
- always @(posedge clk or posedge rst or posedge clear)begin
+ always @(posedge clk or posedge rst )begin
    if(rst)begin
-    out <= 34'b0;
     for(i = 0; i < 3;i=i+1)begin
       weight[i] <= `DATA_BIT'b0;
       feature[i] <= `DATA_BIT'b0;
@@ -35,19 +34,24 @@ module mac(clk,rst,clear,w_w,w_in,if_w,if_in,out);
       feature[i] <= `DATA_BIT'b0;
       end
     end
- end
-always @(*)begin
-    if(w_w) begin
-      weight[2] = weight[1];
-      weight[1] = weight[0];
-      weight[0] = w_in;
-    end
+    else begin
+       if(w_w) begin
+      weight[2] <= weight[1];
+      weight[1] <= weight[0];
+      weight[0] <= w_in;
+      end
     if(if_w) begin
-      feature[2] = weight[1];
-      feature[1] = weight[0];
-      feature[0] = if_in;
+      feature[2] <= feature[1];
+      feature[1] <= feature[0];
+      feature[0] <= if_in;
+    end      
     end
-
-end
+ end
+ always @(*)begin
+   if(rst)
+   out = 34'b0;
+   else
+   out = feature[2]*weight[2]+feature[1]*weight[1]+feature[0]*weight[0];
+ end
   
 endmodule
