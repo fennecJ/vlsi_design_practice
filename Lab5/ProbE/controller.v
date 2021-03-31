@@ -43,19 +43,16 @@ module controller(clk,
   reg [31:0]	in_mem_addr;
   reg [31:0]	out_mem_addr;
   integer count;
-  reg en_in_mem,en_out_mem,out_mem_read,out_mem_write,done;
-always @(posedge clk)begin
+  reg  		en_in_mem;
+  reg 		en_out_mem;
+  reg        out_mem_read;
+  reg        out_mem_write;
+  reg 		done; 
+always @(posedge clk or rst)begin
   if(rst)
     cs<=`S_reset;
   else
     cs<=ns;
-  case(cs)
-    `S_reset:
-	count <= 0;
-    `S_in_mem:
-	count <=count+1;
-    endcase	
-
 
 end
 always @(*)begin
@@ -67,6 +64,7 @@ always @(*)begin
 	out_mem_read=1'b0;
 	out_mem_write=1'b0;
 	done=1'b0;
+	count = 0;
 	ns = `S_in_mem;
 	end
     `S_in_mem:
@@ -86,6 +84,7 @@ always @(*)begin
 	out_mem_read=1'b0;
 	out_mem_write=1'b1;
 	out_mem_addr = count;
+	count=count+1;
 	done=1'b0;
 	ns = `S_branch1;
 	end
@@ -96,18 +95,18 @@ always @(*)begin
 	out_mem_read=1'b0;
 	out_mem_write=1'b0;
 	done=1'b0;
-	ns =(count==480000)?`S_in_mem:`S_done;
+	ns =(count==`size-1)?(`S_done):(`S_in_mem);
 	end
     `S_done:
 	begin
 	en_in_mem=1'b0;
 	en_out_mem=1'b0;
-	out_mem_read=1'b0;
+	out_mem_read=1'b1;
 	out_mem_write=1'b0;
 	done=1'b1;
 //	ns = `S_in_mem;
 	end
-    default:
+/*    default:
 	begin
 	en_in_mem=1'b0;
 	en_out_mem=1'b0;
@@ -115,7 +114,7 @@ always @(*)begin
 	out_mem_write=1'b0;
 	done=1'b0;
 	ns = `S_branch1;
-	end
+	end*/
     endcase	
 end
 
