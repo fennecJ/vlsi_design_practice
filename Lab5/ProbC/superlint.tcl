@@ -19,8 +19,8 @@ analyze -v2k RAM.v; ## modify your file name ##
 elaborate -bbox true -top RAM; ## modify your top module ##
 
 # Setup clock and reset
-clock clk; ## modify your clock name ##
-reset rst; ## modify your reset name ##
+clock CK; ## modify your clock name ##
+##reset rst; ## modify your reset name ##
 
 # Extract checks
 check_superlint -extract
