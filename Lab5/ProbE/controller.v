@@ -50,7 +50,7 @@ module controller(clk,
   reg 		done; 
 
 
-always @(negedge clk)begin
+always @(posedge clk or posedge rst)begin
   if(rst) begin
     count<=32'd0;
     en_in_mem<=1'b0;
@@ -58,8 +58,9 @@ always @(negedge clk)begin
     out_mem_read<=1'b0;
     out_mem_write<=1'b0;
     cs<=`S_in_mem;
+    done<=1'b0; 
   end
-
+  else begin
  case(cs)
     `S_in_mem:
 	begin
@@ -94,6 +95,7 @@ always @(negedge clk)begin
 	out_mem_write<=1'b0;
 	end
     endcase	
+    end
 end
 
 
