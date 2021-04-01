@@ -53,51 +53,30 @@ module controller(clk,
 always @(negedge clk)begin
   if(rst) begin
     count<=32'd0;
-    cs<=`S_reset;
+    en_in_mem<=1'b0;
+    en_out_mem<=1'b0;
+    out_mem_read<=1'b0;
+    out_mem_write<=1'b0;
+    cs<=`S_in_mem;
   end
-    else begin
-    cs<=ns;
-    end
+
  case(cs)
-    `S_reset:
-	begin
-	en_in_mem<=1'b0;
-	en_out_mem<=1'b0;
-	out_mem_read<=1'b0;
-	out_mem_write<=1'b0;
-	done<=1'b0;
-	ns <= `S_in_mem;
-	count<=32'd0;
-	end
     `S_in_mem:
 	begin
 	en_in_mem<=1'b1;
 	en_out_mem<=1'b0;
-	out_mem_read<=1'b0;
 	out_mem_write<=1'b0;
 	in_mem_addr <= count;
-	done<=1'b0;
-	ns <= `S_out_mem;
+	cs <= `S_out_mem;
 	end
     `S_out_mem:
 	begin
 	en_in_mem<=1'b0;
 	en_out_mem<=1'b1;
-	out_mem_read<=1'b0;
 	out_mem_write<=1'b1;
 	out_mem_addr <= count;
 	count <= (count + 32'd1);
-	done<=1'b0;
-	ns <= `S_branch1;
-	end
-    `S_branch1:
-	begin
-	en_in_mem<=1'b0;
-	en_out_mem<=1'b0;
-	out_mem_read<=1'b0;
-	out_mem_write<=1'b0;
-	done<=1'b0;
-	ns <=(count==`size)?(`S_done):(`S_in_mem);
+	cs <= (count==`size)?(`S_done):(`S_in_mem);
 	end
     `S_done:
 	begin
@@ -106,7 +85,6 @@ always @(negedge clk)begin
 	out_mem_read<=1'b1;
 	out_mem_write<=1'b0;
 	done<=1'b1;
-//	ns = `S_in_mem;
 	end
     default:
 	begin
@@ -114,9 +92,6 @@ always @(negedge clk)begin
 	en_out_mem<=1'b0;
 	out_mem_read<=1'b0;
 	out_mem_write<=1'b0;
-	done<=1'b0;
-	ns <= `S_branch1;
-
 	end
     endcase	
 end
