@@ -15,9 +15,10 @@ FLP_NR_MXCS FLP_NO_ASRT REG_NR_RWRC INS_NR_INPR MOD_NS_GLGC OTP_NR_ASYA}
 ##------------------Dont touch----------------------##
 
 # import and elaborate design //
-analyze -v2k RAM.v; ## modify your file name ##
-elaborate -bbox true -top RAM; ## modify your top module ##
-
+analyze -v2k ROM.v; ## modify your file name ##
+elaborate -bbox true -top ROM; ## modify your top module ##
+##analyze -v2k RAM.v; ## modify your file name ##
+##elaborate -bbox true -top RAM; ## modify your top module ##
 # Setup clock and reset
 clock CK; ## modify your clock name ##
 ##reset rst; ## modify your reset name ##
