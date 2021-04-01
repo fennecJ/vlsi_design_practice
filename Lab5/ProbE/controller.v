@@ -42,7 +42,7 @@ module controller(clk,
   reg [2:0]	cs,ns;
   reg [31:0]	in_mem_addr;
   reg [31:0]	out_mem_addr;
-  integer count;
+  reg [31:0] 	count;
   reg  		en_in_mem;
   reg 		en_out_mem;
   reg        out_mem_read;
@@ -50,8 +50,9 @@ module controller(clk,
   reg 		done; 
 
 
-always @(posedge clk)begin
+always @(negedge clk)begin
   if(rst) begin
+    count<=32'd0;
     cs<=`S_reset;
   end
     else begin
@@ -66,6 +67,7 @@ always @(posedge clk)begin
 	out_mem_write<=1'b0;
 	done<=1'b0;
 	ns <= `S_in_mem;
+	count<=32'd0;
 	end
     `S_in_mem:
 	begin
@@ -84,6 +86,7 @@ always @(posedge clk)begin
 	out_mem_read<=1'b0;
 	out_mem_write<=1'b1;
 	out_mem_addr <= count;
+	count <= (count + 32'd1);
 	done<=1'b0;
 	ns <= `S_branch1;
 	end
@@ -94,7 +97,7 @@ always @(posedge clk)begin
 	out_mem_read<=1'b0;
 	out_mem_write<=1'b0;
 	done<=1'b0;
-	ns <=(count==`size-1)?(`S_done):(`S_in_mem);
+	ns <=(count==`size)?(`S_done):(`S_in_mem);
 	end
     `S_done:
 	begin
@@ -118,17 +121,6 @@ always @(posedge clk)begin
     endcase	
 end
 
-
-always @(*)begin
-if(rst)
-	count = 0;
-if(cs==`S_out_mem)
-	count = count + 1;
-else begin
-count = count + 1;
-count = count - 1;
-end
-end
 
 
 
