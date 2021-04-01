@@ -21,7 +21,7 @@ module ROM (CK, A, OE, Q);
 
   reg    [23:0] Q;
   reg    [13:0]  latched_A;
-  reg    [23:0] memory [0:16383];
+  reg    [23:0] memory [16383:0];
 
   always @(posedge CK) begin
     latched_A <= A;
@@ -32,7 +32,7 @@ module ROM (CK, A, OE, Q);
       Q = memory[latched_A];
     end
     else begin
-      Q = 24'hz;  
+      Q = 24'h0;  
     end
   end
 endmodule
