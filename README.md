@@ -44,4 +44,4 @@ A simple mealy FSM
 #### ProbD
 A simple shift convolution module
 #### ProbE
-A simple grayscale which convert 800*600 bmp rgb pics into gray scale pic
+A simple grayscale converter which convert 800*600 bmp rgb pics into gray scale pic
