@@ -32,7 +32,7 @@ module ROM (CK, A, OE, Q);
       Q = memory[latched_A];
     end
     else begin
-      Q = 24'hz;  
+      Q = 24'h0;  
     end
   end
 endmodule
