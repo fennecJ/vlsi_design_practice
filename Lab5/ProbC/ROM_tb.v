@@ -29,11 +29,12 @@ module ROM_tb;
         clk = 0; rst = 0;
         read_enable = 0; address = 14'd0;
     #20 rst = 1;
-    #40 rst = 0; read_enable = 1;
+    #40 rst = 0; 
     // Please add some test pattern to verify your module
     for(i=16368;i<16384;i=i+1)begin
+      address = i;
 	#20
-	address = i;
+	 read_enable = 1;
         $display($time, "ns ROM[%d]=%h, ", i, rom1.memory[i]);
         if(rom1.memory[i]!=i) begin
         $display($time, "ns Error at RAM[%d]=%h, ", i, rom1.memory[i]);
