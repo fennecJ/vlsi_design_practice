@@ -37,7 +37,54 @@ output                  clear;
 output                  pad_en;
 output                  pool_en;
 output                  done;
+// --------------------------------- registers  =----------------------------- //
+reg [`ADDR_BITS-1:0] ROM_IF_A, ROM_W_A;
+reg                  ROM_IF_OE, ROM_W_OE;
+reg [`ADDR_BITS-1:0] RAM_CONV_A;
+reg                  RAM_CONV_WE, RAM_CONV_OE;
+reg [`ADDR_BITS-1:0] RAM_POOL_A;
+reg                  RAM_POOL_WE, RAM_POOL_OE;
+reg [2:0]            sel_if, sel_w;
+reg                  clear;
+reg                  pad_en;
+reg                  pool_en;
+reg                  done;
 
+reg [2:0] cs;
 // ---------------------- Write down Your design below  ---------------------- //
+always @(posedge clk or posedge rst)begin
+    if(rst)begin
+    
+
+    cs<=READ_W;
+    end
+    else
+    case(cs)
+    READ_W:
+    begin
+    end
+    READ_9:
+    begin
+    end
+    READ_C:
+    begin
+    end
+    WRITE_C:
+    begin
+    end
+    READ_P:
+    begin
+    end
+    WRITE_P:
+    begin
+    end
+    default:
+    begin
+    end
+    endcase
+
+end
+
+
 
 endmodule
