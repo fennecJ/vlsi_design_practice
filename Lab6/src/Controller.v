@@ -88,24 +88,37 @@ always @(posedge clk or posedge rst)begin
     case(cs)
     READ_W:
     begin
-    if(y==257)begin
+    if(cnt<9)begin
+    ROM_W_A<=cnt;
+    cnt<=cnt+1;
+    cs<=READ_W;
+    end
+    else begin
+    cnt<=0;
+    cs<=READ_9;
+    end
+    end
+    READ_9:
+    begin
+    if(y==257)
+    begin
     y<=0;
     x<=x+1;    
     end
     else if(cnt==2)
     y<=y+1;
+
     tmp<=tmp+1;
     cnt<=cnt+1;
     if(x+cnt<258)begin
     ROM_IF_A<=258*(x+cnt)+y;      //sth cool happen when x>255
-    ROM_W_A<=258*(x+cnt)+y;
     RAM_CONV_A<=258*(x+cnt)+y;
     end
 
     if(x==0||x==257||y==0||y==257)
-    pad_en=1'b1;
+    pad_en<=1'b1;
     else
-    pad_en=1'b0;
+    pad_en<=1'b0;
 
     ROM_IF_OE<=1'b1;
     ROM_W_OE<=1'b1;
@@ -119,27 +132,28 @@ always @(posedge clk or posedge rst)begin
     */
     sel_if<=2*cnt;
     sel_w<=2*cnt;
-    if(cnt==3)begin
+    if(cnt==2)begin
         cnt<=0;
     end
-    if(y>3||x>0)
+    if(y>2&&y<256)begin
     RAM_CONV_WE<=1'b1;
-    else
+    
+
+    end
+    else begin
     RAM_CONV_WE<=1'b0;
+
+    end
     if(x==257&&y==257)
     done<=1'b1;//cs<=...
     else
-    cs<=READ_W;
-    end
-    READ_9:
-    begin
+    cs<=READ_9;
     end
     READ_C:
     begin
     end
     WRITE_C:
     begin
-    
     end
     READ_P:
     begin
@@ -150,6 +164,7 @@ always @(posedge clk or posedge rst)begin
     default:
     begin
     end
+
     endcase
 end
 
