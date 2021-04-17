@@ -51,13 +51,14 @@ reg                  done;
 reg [2:0]            sel_if, sel_w;
 reg [66563:0] IFP;
 reg [3:0] tst [2:0][2:0];
-integer cnt,x,y,tmp;
+integer cnt,x,y,tmp,i,j,w;
 reg [2:0] cs;
 // ---------------------- Write down Your design below  ---------------------- //
 always @(posedge clk or posedge rst)begin
     if(rst)begin
     x<=0;
     y<=0;
+    w<=0;
     ROM_IF_A<=`ADDR_BITS'b0;
     ROM_W_A<=`ADDR_BITS'b0;
     RAM_CONV_A<=`ADDR_BITS'b0;
@@ -79,75 +80,95 @@ always @(posedge clk or posedge rst)begin
     pool_en<=1'b0;
     done<=1'b0;
     sel_if<=3'b0;
-    sel_w<=3'b0;
+    sel_w<=3'b001;
     cnt<=0;
     tmp<=0;
+    i<=0;
+    j<=0;
     cs<=READ_W;
     end
     else
     case(cs)
     READ_W:
     begin
-    if(cnt<9)begin
-    ROM_W_A<=cnt;
-    cnt<=cnt+1;
-    cs<=READ_W;
-    end
-    else begin
-    cnt<=0;
-    cs<=READ_9;
-    end
+        if(cnt<9)begin
+        ROM_W_A<=cnt;
+        cnt<=cnt+1;
+        cs<=READ_W;
+        ROM_W_OE<=1'b1;
+        if(cnt==2||cnt==5)begin
+        i<=i+1;
+        sel_w<=(1<<i+1);
+        end
+        //$display("%d %d %b", i,cnt,sel_w);
+        end
+        else begin
+        cnt<=0;
+        cs<=READ_9;
+        ROM_W_OE<=1'b0;
+        i<=0;
+        ROM_W_A<=0;
+        sel_w<=0;
+        end
+
     end
     READ_9:
     begin
-    if(y==257)
-    begin
-    y<=0;
-    x<=x+1;    
-    end
-    else if(cnt==2)
-    y<=y+1;
+        //Set weight address\\
+        ROM_W_A<=w;
+        w<=w+1;
+        if(w==8)
+        w<=0;
 
-    tmp<=tmp+1;
-    cnt<=cnt+1;
-    if(x+cnt<258)begin
-    ROM_IF_A<=258*(x+cnt)+y;      //sth cool happen when x>255
-    RAM_CONV_A<=258*(x+cnt)+y;
-    end
 
-    if(x==0||x==257||y==0||y==257)
-    pad_en<=1'b1;
-    else
-    pad_en<=1'b0;
+        //Set weight address\\
+        if(y==257)
+        begin
+        y<=0;
+        x<=x+1;    
+        end
+        else if(cnt==2)
+        y<=y+1;
 
-    ROM_IF_OE<=1'b1;
-    ROM_W_OE<=1'b1;
+        cnt<=cnt+1;
+        ROM_W_OE<=1'b1;
+        if(x==0||x==257||y==0||y==257)begin
+            pad_en<=1'b1;
+            ROM_IF_OE<=1'b0;
+        end
+        else 
+        begin
+            if(j==255)begin
+            j<=0;
+            i<=i+1;
+            end else
+            j<=j+1;
+            pad_en<=1'b0;
+            ROM_IF_A<=256*i+j;
+            ROM_IF_OE<=1'b1;
+        end
+        //TODO change the selected pixel of ROM_IF
+        //It should be like Read a row instead of read a col
+        sel_if<=(1<<cnt);
+        sel_w<=(1<<cnt);
+        if(cnt==2)begin
+            cnt<=0;
+        end 
+        //TODO change the order of sel_if,sel_w
 
-    RAM_CONV_OE<=1'b1;
-
-    /* 
-       110 111 111
-       011 100 101
-       000 001 010
-    */
-    sel_if<=2*cnt;
-    sel_w<=2*cnt;
-    if(cnt==2)begin
-        cnt<=0;
-    end
-    if(y>2&&y<256)begin
-    RAM_CONV_WE<=1'b1;
-    
-
-    end
-    else begin
-    RAM_CONV_WE<=1'b0;
-
-    end
-    if(x==257&&y==257)
-    done<=1'b1;//cs<=...
-    else
-    cs<=READ_9;
+        if(y>1&&cnt==2)begin
+        RAM_CONV_WE<=1'b1;
+        RAM_CONV_A<=tmp;
+        tmp<=tmp+1;
+      //  $display("tmp:%d",tmp);
+        end
+        else
+        RAM_CONV_WE<=1'b0;
+        
+        if(x==257&&y==257)
+        done<=1'b1;//cs<=...
+        else
+        cs<=READ_9;
     end
     READ_C:
     begin
