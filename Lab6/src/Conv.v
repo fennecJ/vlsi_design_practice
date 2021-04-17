@@ -61,6 +61,7 @@ always @(posedge clk)begin
    else begin
    tmp = feature[2]*weight[2]+feature[1]*weight[1]+feature[0]*weight[0];
    result = (tmp<0)?({2'b11,tmp}):({2'b0,tmp});
+   //$display("%d",tmp);
    end
  end
 

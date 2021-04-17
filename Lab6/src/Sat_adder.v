@@ -13,7 +13,17 @@ module Sat_adder(in0, in1, in2, sum);
 
 input  signed [`DATA_BITS*2+1:0] in0, in1, in2;
 output signed [`DATA_BITS-1:0]   sum;
-
+reg  signed [`DATA_BITS-1:0]   sum;
+reg signed [`DATA_BITS*2+3:0] tmp;
 // ---------------------- Write down Your design below  ---------------------- //
-
+always @(in0 or in1 or in2)begin
+    tmp=in0+in1+in2;
+    if(tmp>255)
+    sum = 255;
+    else if(tmp<0)
+    sum = 0;
+    else
+    sum = tmp;
+    //$display("sum %d %d %d %d",sum,in0,in1,in2);
+end
 endmodule
