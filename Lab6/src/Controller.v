@@ -15,7 +15,7 @@ module Controller (clk, rst,
                   RAM_POOL_A, RAM_POOL_WE, RAM_POOL_OE,
                   sel_if, sel_w, clear, pad_en, pool_en, done);
 
-parameter INIT    = 3'b000,
+parameter INIT  = 3'b000,
           READ_W  = 3'b001,
           READ_9  = 3'b010,
           READ_C  = 3'b011,
@@ -50,65 +50,44 @@ reg                  pool_en;
 reg                  done;
 reg [2:0]            sel_if, sel_w;
 reg [3:0] tst [2:0][2:0];
-integer cnt,q,ptmp,row,col,prow,pcol,tmp;
+reg [`ADDR_BITS-1:0] cnt,q,ptmp,row,col,prow,pcol,tmp;
 reg [2:0] cs,ns;
 // ---------------------- Write down Your design below  ---------------------- //
 always @(posedge clk or posedge rst)begin
-  //$display("%d %d %d %d",row,col,row*256+col,tmp);
-if(cs==WRITE_P)
-$display("%d %d %d",prow,pcol,ptmp);
-    if(rst)begin
-    q<=0;
-    row<=0;
-    col<=0;
-    ROM_IF_A<=`ADDR_BITS'b0;
-    ROM_W_A<=`ADDR_BITS'b0;
-    RAM_CONV_A<=`ADDR_BITS'b0;
-    RAM_POOL_A<=`ADDR_BITS'b0;
-    {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_OE,RAM_POOL_WE,done,clear,pad_en,pool_en}=10'b0000000;
-    sel_if<=3'b000;
-    sel_w<=3'b100;
-    cnt<=0;
-    tmp<=0;
-    ns<=READ_W;
-    prow<=0;
-    pcol<=0;
-    ptmp<=0;
-    end
-    else begin
-      cs<=ns;
+  if(rst)begin
+    {ROM_W_A,row,col,cnt,tmp,prow,pcol,ptmp} <={`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0};
+    cs<=READ_W;
+  end
+  else begin
+    cs<=ns;
     case(cs)
-      READ_W:
+      READ_W: ROM_W_A<=(ROM_W_A<=`ADDR_BITS'd9)?ROM_W_A+`ADDR_BITS'd1:ROM_W_A;
+      READ_9: 
         begin
-          if(ROM_W_A<=9)
-            ROM_W_A<=ROM_W_A+1;
-          end
-      READ_9,READ_C: 
-        cnt<=cnt+1;
+          col<=`ADDR_BITS'd1;
+          cnt<=cnt+`ADDR_BITS'd1;
+        end
+      READ_C: cnt<=cnt+`ADDR_BITS'd1;
       WRITE_C:
-          begin
-              tmp<=tmp+1;
-              if(col<256) begin
-                  col<=col+1;
-              end
-              else begin
-                  row<=row+1;
-              end
-          end
-          READ_P:
-          begin
-	  cnt<=cnt+1;
-          end
-          WRITE_P:
-          begin
-	  ptmp<=ptmp+1;
-	  if(pcol<126)
-	  pcol<=pcol+2;
-	  else  begin
-	  	prow<=prow+2;
-		pcol<=0;
+        begin
+          cnt<=`ADDR_BITS'd0;
+          tmp<=tmp+`ADDR_BITS'd1;
+          if(col<`ADDR_BITS'd256)  col<=col+`ADDR_BITS'd1;
+          else  row<=row+`ADDR_BITS'd1;
+        end
+      READ_P:
+        cnt<=cnt+`ADDR_BITS'd1;
+      WRITE_P:
+        begin
+          cnt<=`ADDR_BITS'd0;
+	        ptmp<=ptmp+`ADDR_BITS'd1;
+	        if(pcol<`ADDR_BITS'd254)  pcol<=pcol+`ADDR_BITS'd2;
+	        else  begin
+	  	       prow<=prow+`ADDR_BITS'd2;
+	  	       pcol<=`ADDR_BITS'd0;
        	  end
-          end
+        end
+      default:;
     endcase
     end
 end
@@ -116,106 +95,72 @@ end
 
 //next state
 always @(*) begin
-    case(cs)
-    READ_W: ns=(ROM_W_A==10)?READ_9:READ_W;
-    READ_9: ns=(cnt==9)?WRITE_C:READ_9;
-    READ_C: ns=(cnt==3)?WRITE_C:READ_C;
-    WRITE_C:
-	if(tmp==65536) ns=READ_P;
-	else
-	ns=(col<256)?READ_C:READ_9;
-        READ_P:ns=(cnt==3)?READ_P:DONE;
-        WRITE_P:ns=(ptmp==16383)?DONE:READ_P;
-        default:
-        begin
-        end
+  case(cs)
+    READ_W : ns = (ROM_W_A == `ADDR_BITS'd10   ) ? READ_9  : READ_W;
+    READ_9 : ns = (cnt     == `ADDR_BITS'd9    ) ? WRITE_C : READ_9;
+    READ_C : ns = (cnt     == `ADDR_BITS'd3    ) ? WRITE_C : READ_C;
+    WRITE_C: ns = (tmp     == `ADDR_BITS'd65535) ? READ_P  : (col<`ADDR_BITS'd256) ? READ_C : READ_9;
+    READ_P : ns = (cnt     == `ADDR_BITS'd4    ) ? WRITE_P : READ_P;
+    WRITE_P: ns = (ptmp    == `ADDR_BITS'd16383) ? DONE    : READ_P;
+    default: ns = READ_W;
   endcase
 end
 //next state
 
+
 //Every cond
 always @(*) begin
-        case(cs)
-        READ_W: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0100000;
-        READ_9: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b1000000;
-        READ_C: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b1000000;
-        WRITE_C:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0010000;
-        READ_P:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0001000;
-        WRITE_P:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000100;
-	DONE:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000001;
-        default:
-        begin
-        end
-    endcase
-  end
+  case(cs)
+    READ_W: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0100000;
+    READ_9: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b1000000;
+    READ_C: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b1000000;
+    WRITE_C:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0010000;
+    READ_P: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0001000;
+    WRITE_P:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000100;
+    DONE:   {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000001;
+    default:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000000;
+  endcase
+end
 //Every cond
+
+
+//sel_w
+always@(*)begin
+  if(cs==READ_W)
+    if     (ROM_W_A<=`ADDR_BITS'd3)sel_w=3'b100;
+    else if(ROM_W_A<=`ADDR_BITS'd6)sel_w=3'b010;
+    else if(ROM_W_A<=`ADDR_BITS'd9)sel_w=3'b001;
+    else                           sel_w=3'b000;
+  else                             sel_w=3'b000;
+end
+//sel_w
+
 
 //pad_en
 always @(*) begin
-    case(cs)
-        READ_W:
-        begin
-            if(ROM_W_A<=9)begin
-                if(ROM_W_A<=3)begin
-                sel_w=3'b100; 
-                end
-                else if (ROM_W_A<=6)begin
-                sel_w=3'b010;
-                end
-                else begin
-                sel_w=3'b001;
-                end
-            end
-            else begin
-            sel_w=3'b0; 
-            end
-        end
-        READ_9:
-        begin
-            case(cnt)
-            1,4,7: pad_en=1'b1;
-            2,3: pad_en=(row==0)?1'b1:1'b0;
-            5,6: pad_en=1'b0;
-            8,9: pad_en=(row==255)?1'b1:1'b0;
-            default:pad_en=1'b0;
-            endcase
-        end
-      READ_C:
-        begin
-                case(cnt)
-                1:
-                    if(row==0||col==256)
-                    pad_en=1'b1;
-                    else
-                    pad_en=1'b0;
-                2: 
-                    if(col==256)
-                    pad_en=1'b1;
-                    else
-                    pad_en=1'b0;
-                3: 
-                    if(row==255||col==256)
-                    pad_en=1'b1;
-                    else
-                    pad_en=1'b0;
-                  default:
-                    pad_en=1'b0;
-                endcase
-        end
-        /*
-        READ_P:
-        begin
-        end
-        WRITE_P:
-        begin
-        end
-        default:
-        begin
-        end
-        */
-    endcase
-  end
+  case(cs)
+    READ_9:
+      begin
+        case(cnt)
+          `ADDR_BITS'd1,`ADDR_BITS'd4,`ADDR_BITS'd7  : pad_en=1'b1;
+          `ADDR_BITS'd2,`ADDR_BITS'd3                : pad_en=(row==`ADDR_BITS'b0)  ?1'b1:1'b0;
+          `ADDR_BITS'd5,`ADDR_BITS'd6                : pad_en=1'b0;
+          `ADDR_BITS'd8,`ADDR_BITS'd9                : pad_en=(row==`ADDR_BITS'd255)?1'b1:1'b0;
+          default                                    : pad_en=1'b0;
+        endcase
+      end
+    READ_C:
+        case(cnt)
+          `ADDR_BITS'd1      : pad_en=(row==`ADDR_BITS'd0||col==`ADDR_BITS'd256)  ?1'b1:1'b0;
+          `ADDR_BITS'd2      : pad_en=(col==`ADDR_BITS'd256)                      ?1'b1:1'b0;
+          `ADDR_BITS'd3      : pad_en=(row==`ADDR_BITS'd255||col==`ADDR_BITS'd256)?1'b1:1'b0;
+          default            : pad_en=1'b0;
+        endcase
+    default:pad_en=1'b0;
+  endcase
+end
 //pad_en
+
 
 //sel_if
 always @(*) begin
@@ -223,31 +168,23 @@ always @(*) begin
         READ_9:
         begin
             case(cnt)
-            1,2,3: sel_if=3'b100;
-            4,5,6: sel_if=3'b010;
-            7,8,9: sel_if=3'b001;
-            default: sel_if=3'b0;
+              `ADDR_BITS'd1,`ADDR_BITS'd2,`ADDR_BITS'd3  : sel_if=3'b100;
+              `ADDR_BITS'd4,`ADDR_BITS'd5,`ADDR_BITS'd6  : sel_if=3'b010;
+              `ADDR_BITS'd7,`ADDR_BITS'd8,`ADDR_BITS'd9  : sel_if=3'b001;
+              default: sel_if=3'b000;
             endcase
         end
       READ_C:
       begin
         case(cnt)
-          1:  sel_if=3'b100;
-          2:  sel_if=3'b010;
-          3:  sel_if=3'b001;
-          default:sel_if=3'b0;
+          `ADDR_BITS'd1      : sel_if=3'b100;
+          `ADDR_BITS'd2      : sel_if=3'b010;
+          `ADDR_BITS'd3      : sel_if=3'b001;
+          default            : sel_if=3'b000;
         endcase
        end
         WRITE_C: sel_if=3'b000;
-        READ_P:
-        begin
-        end
-        WRITE_P:
-        begin
-        end
-        default:
-        begin
-        end
+        default: sel_if=3'b000;
     endcase
  end
 //sel_if
@@ -255,71 +192,64 @@ always @(*) begin
 
 //Addr
 always @(*) begin
-    case(cs)
+  case(cs)
     READ_9:
-    begin
-        case(cnt)
-        0,1:ROM_IF_A=((row-1)*256);//(row-1)<<8;
-        2:  ROM_IF_A=(row-1)*256+1;
-        3,4:ROM_IF_A=(row)*256;
-        5:  ROM_IF_A=(row)*256;
-        6,7:ROM_IF_A=(row+1)*256;
-        8:  ROM_IF_A=(row+1)*256+1;
-        default:begin
-            ROM_IF_A=row*256;
-            end
-        endcase
-    end
+      case(cnt)
+        `ADDR_BITS'd0,`ADDR_BITS'd1    :  ROM_IF_A=((row-`ADDR_BITS'b1)<<8);//(row-1)<<8;
+        `ADDR_BITS'd2                  :  ROM_IF_A=((row-`ADDR_BITS'b1)<<8)+`ADDR_BITS'b1;
+        `ADDR_BITS'd3,`ADDR_BITS'd4    :  ROM_IF_A=row                 <<8;
+        `ADDR_BITS'd5                  :  ROM_IF_A=row                 <<8;
+        `ADDR_BITS'd6,`ADDR_BITS'd7    :  ROM_IF_A=(row+`ADDR_BITS'b1) <<8;
+        `ADDR_BITS'd8                  :  ROM_IF_A=((row+`ADDR_BITS'b1)<<8)+`ADDR_BITS'b1;
+        default                        :  ROM_IF_A=row                 <<8;
+      endcase
     READ_C:
-    begin
-          case(cnt)
-            0:ROM_IF_A=((row-1)*256+col);
-            1:ROM_IF_A=((row)*256+col);
-            2:ROM_IF_A=((row+1)*256+col);
-          endcase
-    end
-    WRITE_C:
-    begin
-        RAM_CONV_A=tmp;
-    end
-    READ_P:
-    begin
-	case(cnt)
-	0:RAM_CONV_A=prow*256+pcol;
-	1:RAM_CONV_A=prow*256+pcol+1;
-	2:RAM_CONV_A=(prow+1)*256+pcol;
-	3:RAM_CONV_A=(prow+1)*256+pcol;
-	endcase
-    end
-    WRITE_P:
-	RAM_POOL_A=ptmp;
+      case(cnt)
+        `ADDR_BITS'd0      :  ROM_IF_A=((row-`ADDR_BITS'b1)<<8)+col;
+        `ADDR_BITS'd1      :  ROM_IF_A=((row)              <<8)+col;
+        `ADDR_BITS'd2      :  ROM_IF_A=((row+`ADDR_BITS'b1)<<8)+col;
+        default            :  ROM_IF_A=((row+`ADDR_BITS'b1)<<8)+col;
+      endcase
+    default:  ROM_IF_A=((row+`ADDR_BITS'b1)<<8)+col;
   endcase
-  end
-
-//Addr
+end
 
 
-always @(*) begin
-    case(cs)
-        READ_9: col=1;
-        WRITE_C:cnt=0;
-        WRITE_P:cnt=0;
-        default:
-        begin
-        end
-    endcase
-    end
-/*
-always @(*)
-if(cs==WRITE_P)
-if(pcol==126)
-//pcol=0;
-*/
+always@(*)
+  pool_en=(cs==READ_P&&cnt>`ADDR_BITS'd0)?1'b1:1'b0;
 
 
+//RAM_CONV_A
+always@(*)begin
+if(rst)
+  RAM_CONV_A=`ADDR_BITS'b0;
+else
+  case(cs)
+    WRITE_C:RAM_CONV_A=tmp;
+    READ_P:
+    case(cnt)
+      `ADDR_BITS'd0      :RAM_CONV_A=(prow<<                8)+pcol;
+      `ADDR_BITS'd1      :RAM_CONV_A=(prow<<                8)+pcol+`ADDR_BITS'b1;
+      `ADDR_BITS'd2      :RAM_CONV_A=((prow+`ADDR_BITS'b1)<<8)+pcol;
+      `ADDR_BITS'd3      :RAM_CONV_A=((prow+`ADDR_BITS'b1)<<8)+pcol+`ADDR_BITS'b1;
+      default            :RAM_CONV_A=((prow+`ADDR_BITS'b1)<<8)+pcol+`ADDR_BITS'b1;
+  	 endcase
+    default  :RAM_CONV_A=((prow+`ADDR_BITS'b1)<<8)+pcol+`ADDR_BITS'b1;
+  endcase
+end
+//RAM_CONV_A
 
 
+//RAM_POOL_A
+always@(*)
+  if(rst)
+    RAM_POOL_A=`ADDR_BITS'b0;
+  else
+    RAM_POOL_A=ptmp;
+//RAM_POOL_A
 
-
+always@(*)
+   clear=(rst)?1'b1:1'b0;
+    
 endmodule
 
