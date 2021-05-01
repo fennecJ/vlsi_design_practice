@@ -24,10 +24,10 @@ reg signed [`DATA_BITS-1:0]   weight [2:0];
 reg signed [`DATA_BITS-1:0]   feature [2:0];
 
 reg signed [`DATA_BITS*2+1:0] result;
-reg signed [`DATA_BITS*2-1:0] tmp;
 integer i;
 // ---------------------- Write down Your design below  ---------------------- //
-always @(posedge clk)begin
+always @(posedge clk or posedge rst)begin
+      //$display("%h %h %h",weight[2],weight[1],weight[0]);
    if(rst)begin
     for(i = 0; i < 3;i=i+1)begin
       weight[i] <= `DATA_BITS'b0;
@@ -41,7 +41,7 @@ always @(posedge clk)begin
       end
     end
     else begin
-       if(w_w) begin
+       if(w_w) begin  
       weight[2] <= weight[1];
       weight[1] <= weight[0];
       weight[0] <= w_in;
@@ -53,16 +53,10 @@ always @(posedge clk)begin
     end      
     end
  end
- always @(*)begin
-   if(rst) begin
-   tmp = `TBITS'b0;
-   result = `RBITS'b0;
-   end
-   else begin
-   tmp = feature[2]*weight[2]+feature[1]*weight[1]+feature[0]*weight[0];
-   result = (tmp<0)?({2'b11,tmp}):({2'b0,tmp});
-   //$display("%d",tmp);
-   end
- end
+
+
+always @(*)
+  result = feature[2]*weight[2]+feature[1]*weight[1]+feature[0]*weight[0];
+
 
 endmodule
