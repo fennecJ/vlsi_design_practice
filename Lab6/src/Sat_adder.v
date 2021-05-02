@@ -17,12 +17,13 @@ reg  signed [`DATA_BITS-1:0]   sum;
 reg signed [22:0] tmp;
 // ---------------------- Write down Your design below  ---------------------- //
 always @(*)begin
-  tmp = in0+in1+in2;
-  if(tmp>=$signed(23'd255))
+  tmp = in0 + in1 + in2;
+  if(tmp >= $signed(23'd255))
     sum = `DATA_BITS'd255;
-  else if(tmp<=$signed(23'd0))
+  else if(tmp <= $signed(23'd0))
     sum = `DATA_BITS'd0;
   else
-    sum = in0+in1+in2;
+    sum = in0 + in1 + in2;
 end
+
 endmodule
