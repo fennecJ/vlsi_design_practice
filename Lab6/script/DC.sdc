@@ -1,5 +1,5 @@
 # Modify the clock period for your design
-create_clock -name clk -period 10 [get_ports clk]
+create_clock -name clk -period 9 [get_ports clk]
 # Don't modify following constraints
 set_dont_touch_network      [get_ports clk]
 set_fix_hold                [get_ports clk]

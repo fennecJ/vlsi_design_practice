@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////
 
 `timescale 1ns/10ps
-`define PERIOD 10.0     // Modify the clock period for your design
+`define PERIOD 9.0     // Modify the clock period for your design
 `define MAX    1000000  // Modify simulation max cycle here
 
 /////////////////////////////////////////////////////////

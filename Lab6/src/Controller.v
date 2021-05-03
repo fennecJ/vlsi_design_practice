@@ -53,7 +53,7 @@ reg [2:0]            cs, ns;
 // ---------------------- Write down Your design below  ---------------------- //
 always @(posedge clk or posedge rst)begin
   if(rst)begin
-    {ROM_W_A,row,col,cnt,tmp,prow,pcol,ptmp,cs} <= {`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0};
+    {ROM_W_A,row,col,cnt,tmp,prow,pcol,ptmp} <= {`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0,`ADDR_BITS'b0};
     cs <= READ_W;
   end
   else begin

@@ -26,13 +26,19 @@ reg signed [`DATA_BITS*2+1:0] result;
 integer i;
 // ---------------------- Write down Your design below  ---------------------- //
 always @(posedge clk or posedge rst)begin
-  if(rst || clear)begin
+  if(rst)begin
     for(i = 0; i < 3; i = i + 1)begin
       weight[i]  <= `DATA_BITS'b0;
       feature[i] <= `DATA_BITS'b0;
     end
   end
-    else begin
+  else if(clear)begin
+    for(i = 0; i < 3; i = i + 1)begin
+      weight[i]  <= `DATA_BITS'b0;
+      feature[i] <= `DATA_BITS'b0;
+    end
+  end
+  else begin
       if(w_w) begin  
         weight[2]  <= weight[1];
         weight[1]  <= weight[0];
