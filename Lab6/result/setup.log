@@ -1,0 +1,92 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+        -sort_by group
+Design : system
+Version: O-2018.06
+Date   : Mon May  3 17:43:58 2021
+****************************************
+
+Operating Conditions: slow   Library: slow
+Wire Load Model Mode: top
+
+  Startpoint: conv3/feature_reg_2__1_
+              (rising edge-triggered flip-flop clocked by clk)
+  Endpoint: RAM_CONV_D[8]
+            (output port clocked by clk)
+  Path Group: clk
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  system             tsmc13_wl10           slow
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock clk (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             1.00       1.00
+  conv3/feature_reg_2__1_/CK (DFFRX4)                     0.00       1.00 r
+  conv3/feature_reg_2__1_/Q (DFFRX4)                      0.53       1.53 f
+  conv3/mult_57/a[1] (Conv_1_DW_mult_tc_3)                0.00       1.53 f
+  conv3/mult_57/U397/Y (CLKXOR2X2)                        0.32       1.84 f
+  conv3/mult_57/U583/Y (NAND2X2)                          0.13       1.97 r
+  conv3/mult_57/U426/Y (BUFX12)                           0.19       2.16 r
+  conv3/mult_57/U433/Y (OAI22X2)                          0.17       2.33 f
+  conv3/mult_57/U484/Y (NOR2X1)                           0.22       2.55 r
+  conv3/mult_57/U483/Y (NAND2BX1)                         0.24       2.80 r
+  conv3/mult_57/U645/Y (CLKINVX1)                         0.27       3.06 f
+  conv3/mult_57/product[1] (Conv_1_DW_mult_tc_3)          0.00       3.06 f
+  conv3/add_1_root_add_57_2/A[1] (Conv_1_DW01_add_2)      0.00       3.06 f
+  conv3/add_1_root_add_57_2/U229/Y (NAND2X1)              0.35       3.42 r
+  conv3/add_1_root_add_57_2/U313/Y (NAND2X1)              0.19       3.60 f
+  conv3/add_1_root_add_57_2/U248/Y (XOR2X2)               0.22       3.83 f
+  conv3/add_1_root_add_57_2/SUM[1] (Conv_1_DW01_add_2)
+                                                          0.00       3.83 f
+  conv3/add_0_root_add_57_2/B[1] (Conv_1_DW01_add_5)      0.00       3.83 f
+  conv3/add_0_root_add_57_2/U221/Y (NOR2X2)               0.17       4.00 r
+  conv3/add_0_root_add_57_2/U306/Y (CLKINVX1)             0.26       4.26 f
+  conv3/add_0_root_add_57_2/U305/Y (NAND2X1)              0.24       4.50 r
+  conv3/add_0_root_add_57_2/U225/Y (XNOR2X1)              0.25       4.74 f
+  conv3/add_0_root_add_57_2/SUM[1] (Conv_1_DW01_add_5)
+                                                          0.00       4.74 f
+  conv3/result[1] (Conv_1)                                0.00       4.74 f
+  a1/in2[1] (Sat_adder)                                   0.00       4.74 f
+  a1/U16/Y (CLKBUFX3)                                     0.30       5.04 f
+  a1/add_1_root_add_0_root_add_26_2/A[1] (Sat_adder_DW01_add_3)
+                                                          0.00       5.04 f
+  a1/add_1_root_add_0_root_add_26_2/U1_1/CO (ADDFHX2)     0.42       5.46 f
+  a1/add_1_root_add_0_root_add_26_2/U1_2/CO (ADDFX1)      0.34       5.80 f
+  a1/add_1_root_add_0_root_add_26_2/U1_3/CO (ADDFX2)      0.38       6.18 f
+  a1/add_1_root_add_0_root_add_26_2/U1_4/CO (ADDFHX2)     0.25       6.43 f
+  a1/add_1_root_add_0_root_add_26_2/U1_5/CO (ADDFHX2)     0.23       6.66 f
+  a1/add_1_root_add_0_root_add_26_2/U1_6/CO (ADDFHX2)     0.23       6.89 f
+  a1/add_1_root_add_0_root_add_26_2/U1_7/CO (ADDFHX1)     0.30       7.19 f
+  a1/add_1_root_add_0_root_add_26_2/U1_8/Y (XOR3XL)       0.52       7.71 r
+  a1/add_1_root_add_0_root_add_26_2/SUM[8] (Sat_adder_DW01_add_3)
+                                                          0.00       7.71 r
+  a1/add_0_root_add_0_root_add_26_2/B[8] (Sat_adder_DW01_add_2)
+                                                          0.00       7.71 r
+  a1/add_0_root_add_0_root_add_26_2/U1_8/Y (XOR3X2)       0.45       8.16 f
+  a1/add_0_root_add_0_root_add_26_2/SUM[8] (Sat_adder_DW01_add_2)
+                                                          0.00       8.16 f
+  a1/U36/Y (AND3X4)                                       0.20       8.37 f
+  a1/sum[8] (Sat_adder)                                   0.00       8.37 f
+  U3/Y (BUFX20)                                           0.13       8.50 f
+  RAM_CONV_D[8] (out)                                     0.00       8.50 f
+  data arrival time                                                  8.50
+
+  clock clk (rise edge)                                   9.00       9.00
+  clock network delay (ideal)                             0.00       9.00
+  output external delay                                  -0.50       8.50
+  data required time                                                 8.50
+  --------------------------------------------------------------------------
+  data required time                                                 8.50
+  data arrival time                                                 -8.50
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1
