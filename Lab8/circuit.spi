@@ -1,7 +1,27 @@
 ***inverter***
 .subckt inv Vin Vout VDD GND
-  *<Name> <drain> <gate> <src> <body> <Lib> <width>   <Length>
-    MnMos  Vout    Vin    gnd   gnd    n_18  W=1u      L=0.18u
-    MpMos  Vout    Vin    VDD   VDD    p_18  W=0.5u    L=0.18u   
+ ***<Name> <drain> <gate> <src> <body> <Lib> <width> <Length>***
+    MnMos  Vout    Vin    gnd   gnd    n_18  W=0.5u   L=0.18u
+    MpMos  Vout    Vin    VDD   VDD    p_18  W=1u     L=0.18u   
 .ends
+
+***nand***
+.subckt nand  A B VDD GND out_2
+ ***<Name> <drain> <gate> <src> <body> <Lib> <width> <Length>***
+    Mpmos1  out_2   A      VDD   VDD    p_18  W=1u    L=180n
+    Mpmos2  out_2   B      VDD   VDD    p_18  W=1u    L=180n
+    Mnmos1  out_2   A      tmp   GND    n_18  W=0.5u  L=180n
+    Mnmos2  tmp     B      GND   GND    n_18  W=0.5u  L=180n
+.ends
+
+***nor***
+.subckt nor  X Y VDD GND out_3
+ ***<Name> <drain> <gate> <src> <body> <Lib> <width> <Length>***
+    Mpmos1  tmp     X      VDD   VDD    p_18  W=1u    L=180n
+    Mpmos2  out_3   Y      tmp   VDD    p_18  W=1u    L=180n
+    Mnmos1  out_3   Y      GND   GND    n_18  W=0.5u  L=180n
+    Mnmos2  out_3   X      GND   GND    n_18  W=0.5u  L=180n
+.ends
+
+
 
