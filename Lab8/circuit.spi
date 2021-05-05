@@ -1,0 +1,7 @@
+***inverter***
+.subckt inv Vin Vout VDD GND
+  *<Name> <drain> <gate> <src> <body> <Lib> <width>   <Length>
+    MnMos  Vout    Vin    gnd   gnd    n_18  W=1u      L=0.18u
+    MpMos  Vout    Vin    VDD   VDD    p_18  W=0.5u    L=0.18u   
+.ends
+
