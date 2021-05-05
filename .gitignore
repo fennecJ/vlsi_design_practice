@@ -14,3 +14,7 @@
 !*.setup
 !*.dat
 !*.bmp
+!*.spi
+!*.sp
+!Lab*/*.sp
+!Lab*/*.spi
