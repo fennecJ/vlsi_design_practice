@@ -39,8 +39,8 @@ output                  pool_en;
 output                  done;
 // --------------------------------- registers  =----------------------------- //
 reg [`ADDR_BITS-1:0] ROM_IF_A, ROM_W_A; 
-reg [`ADDR_BITS-1:0] RAM_CONV_A;
-reg [`ADDR_BITS-1:0] RAM_POOL_A;
+reg [`ADDR_BITS-1:0] RAM_CONV_A,RACA;
+reg [`ADDR_BITS-1:0] RAM_POOL_A,RAPA;
 reg                  ROM_IF_OE, ROM_W_OE;
 reg                  RAM_CONV_WE, RAM_CONV_OE;
 reg                  RAM_POOL_WE, RAM_POOL_OE;
@@ -50,36 +50,39 @@ reg                  pool_en;
 reg                  done;
 reg [2:0]            sel_if, sel_w;
 reg [3:0] tst [2:0][2:0];
-integer cnt,q,y,row,col,tmp,o,a,b;
+integer cnt,q,ptmp,row,col,prow,pcol,tmp;
 reg [2:0] cs,ns;
 // ---------------------- Write down Your design below  ---------------------- //
-always @(posedge clk or posedge rst or posedge cs)begin
+always @(posedge clk or posedge rst)begin
+  //$display("%d %d %d %d",row,col,row*256+col,tmp);
+if(cs==WRITE_P)
+$display("%d %d %d",prow,pcol,ptmp);
     if(rst)begin
     q<=0;
-    y<=0;
     row<=0;
     col<=0;
-    a<=0;
-    b<=0;
     ROM_IF_A<=`ADDR_BITS'b0;
     ROM_W_A<=`ADDR_BITS'b0;
     RAM_CONV_A<=`ADDR_BITS'b0;
     RAM_POOL_A<=`ADDR_BITS'b0;
     {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_OE,RAM_POOL_WE,done,clear,pad_en,pool_en}=10'b0000000;
     sel_if<=3'b000;
-    sel_w<=3'b000;
+    sel_w<=3'b100;
     cnt<=0;
     tmp<=0;
-    ns<=INIT;
+    ns<=READ_W;
+    prow<=0;
+    pcol<=0;
+    ptmp<=0;
     end
     else begin
       cs<=ns;
     case(cs)
       READ_W:
-          if(ROM_W_A<9)
-            cnt<=cnt+1;
-          else
-            cnt<=0;
+        begin
+          if(ROM_W_A<=9)
+            ROM_W_A<=ROM_W_A+1;
+          end
       READ_9,READ_C: 
         cnt<=cnt+1;
       WRITE_C:
@@ -94,31 +97,35 @@ always @(posedge clk or posedge rst or posedge cs)begin
           end
           READ_P:
           begin
+	  cnt<=cnt+1;
           end
           WRITE_P:
           begin
-          end
-          default:
-          begin
+	  ptmp<=ptmp+1;
+	  if(pcol<126)
+	  pcol<=pcol+2;
+	  else  begin
+	  	prow<=prow+2;
+		pcol<=0;
+       	  end
           end
     endcase
-        end
+    end
 end
+
 
 //next state
 always @(*) begin
     case(cs)
-    INIT: ns=READ_W;
-    READ_W: ns=(cnt==9)?READ_9:READ_W;
-    READ_9: ns=(cnt==8)?WRITE_C:READ_9;
-    READ_C: ns=(cnt==2)?WRITE_C:READ_C;
-    WRITE_C:ns=(col<256)?READ_C:READ_9;
-        READ_P:
-        begin
-        end
-        WRITE_P:
-        begin
-        end
+    READ_W: ns=(ROM_W_A==10)?READ_9:READ_W;
+    READ_9: ns=(cnt==9)?WRITE_C:READ_9;
+    READ_C: ns=(cnt==3)?WRITE_C:READ_C;
+    WRITE_C:
+	if(tmp==65536) ns=READ_P;
+	else
+	ns=(col<256)?READ_C:READ_9;
+        READ_P:ns=(cnt==3)?READ_P:DONE;
+        WRITE_P:ns=(ptmp==16383)?DONE:READ_P;
         default:
         begin
         end
@@ -129,13 +136,13 @@ end
 //Every cond
 always @(*) begin
         case(cs)
-        INIT:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000000;
         READ_W: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0100000;
         READ_9: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b1000000;
         READ_C: {ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b1000000;
-        WRITE_C:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=(tmp==65536)?7'b0010001:7'b0010000;
+        WRITE_C:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0010000;
         READ_P:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0001000;
         WRITE_P:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000100;
+	DONE:{ROM_IF_OE,ROM_W_OE,RAM_CONV_WE,RAM_CONV_OE,RAM_POOL_WE,RAM_POOL_OE,done}=7'b0000001;
         default:
         begin
         end
@@ -145,32 +152,48 @@ always @(*) begin
 
 //pad_en
 always @(*) begin
-        case(cs)
-
+    case(cs)
+        READ_W:
+        begin
+            if(ROM_W_A<=9)begin
+                if(ROM_W_A<=3)begin
+                sel_w=3'b100; 
+                end
+                else if (ROM_W_A<=6)begin
+                sel_w=3'b010;
+                end
+                else begin
+                sel_w=3'b001;
+                end
+            end
+            else begin
+            sel_w=3'b0; 
+            end
+        end
         READ_9:
         begin
             case(cnt)
-            0,3,6: pad_en<=1'b1;
-            1,2: pad_en<=(row==0)?1'b1:1'b0;
-            4,5: pad_en<=1'b0;
-            7,8: pad_en<=(row==255)?1'b1:1'b0;
-            default:pad_en<=1'b0;
+            1,4,7: pad_en=1'b1;
+            2,3: pad_en=(row==0)?1'b1:1'b0;
+            5,6: pad_en=1'b0;
+            8,9: pad_en=(row==255)?1'b1:1'b0;
+            default:pad_en=1'b0;
             endcase
         end
-    READ_C:
+      READ_C:
         begin
                 case(cnt)
-                0:
+                1:
                     if(row==0||col==256)
                     pad_en=1'b1;
                     else
                     pad_en=1'b0;
-                1: 
+                2: 
                     if(col==256)
                     pad_en=1'b1;
                     else
                     pad_en=1'b0;
-                2: 
+                3: 
                     if(row==255||col==256)
                     pad_en=1'b1;
                     else
@@ -180,28 +203,6 @@ always @(*) begin
                 endcase
         end
         /*
-        WRITE_C:
-        begin
-            $display("%d %d",row,col);
-            cnt<=0;
-            sel_if<=3'b000;
-            RAM_CONV_A<=tmp;
-            RAM_CONV_WE<=1'b1;
-            tmp<=tmp+1;
-            if(tmp>65535)begin
-                done<=1'b1;
-            end
-            else begin
-            if(col<256) begin
-                cs<=READ_C;
-                col<=col+1;
-            end
-            else begin
-                row<=row+1;
-                cs<=READ_9;
-            end
-            end
-        end
         READ_P:
         begin
         end
@@ -217,30 +218,24 @@ always @(*) begin
 //pad_en
 
 //sel_if
-always @(posedge clk) begin
-        case(cs)
-        READ_W:
-        case(cnt)
-        0,1,2: sel_w<=3'b100;
-        3,4,5: sel_w<=3'b010;
-        6,7,8: sel_w<=3'b001;
-        default: sel_w<=3'b000;
-        endcase
+always @(*) begin
+      case(cs)
         READ_9:
         begin
             case(cnt)
-            0,1,2: sel_if=3'b100;
-            3,4,5: sel_if=3'b010;
-            6,7,8: sel_if=3'b001;
+            1,2,3: sel_if=3'b100;
+            4,5,6: sel_if=3'b010;
+            7,8,9: sel_if=3'b001;
             default: sel_if=3'b0;
             endcase
         end
-    READ_C:
+      READ_C:
       begin
         case(cnt)
-          0:  sel_if=3'b100;
-          1:  sel_if=3'b010;
-          2:  sel_if=3'b001;
+          1:  sel_if=3'b100;
+          2:  sel_if=3'b010;
+          3:  sel_if=3'b001;
+          default:sel_if=3'b0;
         endcase
        end
         WRITE_C: sel_if=3'b000;
@@ -257,11 +252,10 @@ always @(posedge clk) begin
  end
 //sel_if
 
+
 //Addr
 always @(*) begin
     case(cs)
-    READ_W:
-    ROM_W_A=cnt; 
     READ_9:
     begin
         case(cnt)
@@ -276,14 +270,13 @@ always @(*) begin
             end
         endcase
     end
-    
     READ_C:
     begin
-            case(cnt)
+          case(cnt)
             0:ROM_IF_A=((row-1)*256+col);
             1:ROM_IF_A=((row)*256+col);
             2:ROM_IF_A=((row+1)*256+col);
-            endcase
+          endcase
     end
     WRITE_C:
     begin
@@ -291,13 +284,15 @@ always @(*) begin
     end
     READ_P:
     begin
+	case(cnt)
+	0:RAM_CONV_A=prow*256+pcol;
+	1:RAM_CONV_A=prow*256+pcol+1;
+	2:RAM_CONV_A=(prow+1)*256+pcol;
+	3:RAM_CONV_A=(prow+1)*256+pcol;
+	endcase
     end
     WRITE_P:
-    begin
-    end
-    default:
-    begin
-    end
+	RAM_POOL_A=ptmp;
   endcase
   end
 
@@ -305,28 +300,21 @@ always @(*) begin
 
 
 always @(*) begin
-        case(cs)
-        
+    case(cs)
         READ_9: col=1;
         WRITE_C:cnt=0;
-        READ_P:
-        begin
-        end
-        WRITE_P:
-        begin
-        end
+        WRITE_P:cnt=0;
         default:
         begin
         end
     endcase
     end
-
-
-
-
-
-
-
+/*
+always @(*)
+if(cs==WRITE_P)
+if(pcol==126)
+//pcol=0;
+*/
 
 
 
@@ -335,11 +323,3 @@ always @(*) begin
 
 endmodule
 
-always @(x or y) begin
-    
-    //$display("%d %d %d %d",x,y,i,j);
-
-end
-
-
-endmodule
